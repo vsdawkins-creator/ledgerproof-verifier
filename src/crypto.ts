@@ -2,7 +2,7 @@
 // Uses @noble/ed25519 and @noble/hashes — both are widely audited libraries
 // with no native code, so this verifier runs without WASM or server trust.
 
-import { verify as ed25519Verify } from '@noble/ed25519'
+import { verifyAsync as ed25519Verify } from '@noble/ed25519'
 import { sha256 } from '@noble/hashes/sha2.js'
 import { bytesToHex, hexToBytes } from '@noble/hashes/utils.js'
 
