@@ -41,7 +41,10 @@ export async function verifyEntry(sequence: number): Promise<VerificationResult>
   })
 
   // ── 3. Verify content hash ────────────────────────────────────────────────
-  const contentBytes = new TextEncoder().encode(JSON.stringify(entry.content))
+  // Use content from entry_json_canonical to preserve original key order —
+  // PostgreSQL JSONB sorts keys alphabetically, so entry.content would produce a different hash.
+  const canonicalEntry = JSON.parse(entry.entry_json_canonical)
+  const contentBytes = new TextEncoder().encode(JSON.stringify(canonicalEntry.content))
   const computedContentHash = sha256Hex(contentBytes)
   const contentHashMatch = computedContentHash === entry.content_hash
   checks.push({
