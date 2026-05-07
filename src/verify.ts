@@ -107,11 +107,23 @@ export async function verifyEntry(sequence: number): Promise<VerificationResult>
 
   // ── 7–9. Bitcoin anchor checks (only if confirmed) ────────────────────────
   if (receipt?.anchor_status === 'confirmed' && receipt.anchor_txid && receipt.merkle_proof) {
-    // 7. Merkle proof
+    // 7. Merkle proof structural validation (Finding 16: fix always-true check)
+    const proofValid =
+      Array.isArray(receipt.merkle_proof) &&
+      receipt.merkle_proof.every(
+        (step: unknown) =>
+          typeof step === 'object' &&
+          step !== null &&
+          typeof (step as { hash: unknown }).hash === 'string' &&
+          /^[0-9a-f]{64}$/.test((step as { hash: string }).hash) &&
+          typeof (step as { is_left: unknown }).is_left === 'boolean',
+      )
     checks.push({
       name: 'Merkle proof structure',
-      status: receipt.merkle_proof.length >= 0 ? 'pass' : 'fail',
-      detail: `Proof has ${receipt.merkle_proof.length} sibling(s)`,
+      status: proofValid ? 'pass' : 'fail',
+      detail: proofValid
+        ? `Proof has ${receipt.merkle_proof.length} sibling(s) — structure valid`
+        : `Proof is malformed or contains invalid fields`,
     })
 
     // 8. Bitcoin transaction lookup

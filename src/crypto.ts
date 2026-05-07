@@ -36,7 +36,10 @@ export async function verifyEd25519(
 
 /** Verify a Merkle inclusion proof.
  * Each sibling: { hash: hex, is_left: bool }
- * is_left=true means the sibling is the LEFT node and our node is right.
+ * Convention: is_left=true means the SIBLING is the LEFT child.
+ *   is_left=true  → SHA-256(sibling || current)  (sibling goes first)
+ *   is_left=false → SHA-256(current || sibling)  (current goes first)
+ * This matches the JSON written by the confirmer and the WASM verifier.
  */
 export function verifyMerkleProof(
   leafHex: string,

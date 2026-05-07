@@ -1,6 +1,27 @@
 import './style.css'
 import { verifyEntry, type VerificationResult, type Check } from './verify'
 
+// ── Finding 11: XSS prevention ───────────────────────────────────────────────
+// All values interpolated into innerHTML that originate from API responses
+// (publisher_id, key_id, content_type, entry_hash, check.detail, etc.) must
+// be escaped before insertion. Using textContent where possible is preferable,
+// but for the template-literal rendering pipeline here we sanitise at the
+// interpolation boundary.
+function escapeHtml(s: string): string {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+}
+
+// Validate a URL is safe to use as an href — must start with https://
+function safeHref(url: string | undefined): string | null {
+  if (!url) return null
+  return url.startsWith('https://') ? url : null
+}
+
 // ── URL hash routing: #/<sequence> auto-verifies on load ──────────────────────
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
@@ -121,18 +142,19 @@ function renderResult(r: VerificationResult): string {
          ⚠ Partial
        </span>`
 
-  const anchorSection = receipt?.anchor_status === 'confirmed' && receipt.anchor_txid
+  const anchorTxid = receipt?.anchor_txid ? escapeHtml(receipt.anchor_txid) : null
+  const anchorSection = receipt?.anchor_status === 'confirmed' && anchorTxid
     ? `<div class="mt-4 p-3 bg-orange-50 dark:bg-orange-900/10 border border-orange-200
                    dark:border-orange-800 rounded-lg text-xs space-y-1">
          <p class="font-medium text-orange-800 dark:text-orange-400">Bitcoin Anchor</p>
          <p class="font-mono break-all text-gray-600 dark:text-gray-400">
-           <a href="https://mempool.space/tx/${receipt.anchor_txid}" target="_blank" rel="noopener"
-              class="hover:underline text-orange-600 dark:text-orange-400">${receipt.anchor_txid}</a>
+           <a href="https://mempool.space/tx/${anchorTxid}" target="_blank" rel="noopener"
+              class="hover:underline text-orange-600 dark:text-orange-400">${anchorTxid}</a>
          </p>
          <p class="text-gray-500">
-           Block ${receipt.anchor_block_height ?? '—'}
+           Block ${receipt!.anchor_block_height ?? '—'}
            ${confirmations != null ? `· ${confirmations} confirmation${confirmations !== 1 ? 's' : ''}` : ''}
-           ${receipt.anchored_at ? `· ${new Date(receipt.anchored_at).toLocaleString()}` : ''}
+           ${receipt!.anchored_at ? `· ${new Date(receipt!.anchored_at).toLocaleString()}` : ''}
          </p>
        </div>`
     : ''
@@ -144,7 +166,7 @@ function renderResult(r: VerificationResult): string {
         <div>
           <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Entry #${entry.sequence}</h2>
           <p class="text-xs text-gray-500 mt-0.5">
-            ${entry.publisher_id} · ${new Date(entry.entry_timestamp).toLocaleString()}
+            ${escapeHtml(entry.publisher_id)} · ${new Date(entry.entry_timestamp).toLocaleString()}
           </p>
         </div>
         ${statusBadge}
@@ -176,7 +198,7 @@ function renderResult(r: VerificationResult): string {
           <div>
             <span class="text-gray-500 font-medium">Content</span>
             <pre class="mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded text-gray-800 dark:text-gray-200
-                        overflow-x-auto font-mono">${JSON.stringify(entry.content, null, 2)}</pre>
+                        overflow-x-auto font-mono">${escapeHtml(JSON.stringify(entry.content, null, 2))}</pre>
           </div>
         </div>
       </details>
@@ -191,14 +213,17 @@ function renderCheck(check: Check): string {
     ? `<span class="text-red-500">✗</span>`
     : `<span class="text-yellow-500">⚠</span>`
 
+  // Validate link URL — only allow https:// to prevent javascript: injection
+  const safeLinkHref = safeHref(check.link)
+
   return `
     <div class="flex items-start gap-3 px-4 py-3 text-sm">
       <span class="mt-0.5 text-base leading-none flex-shrink-0">${icon}</span>
       <div class="flex-1 min-w-0">
-        <span class="font-medium text-gray-900 dark:text-white">${check.name}</span>
-        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${check.detail}</p>
+        <span class="font-medium text-gray-900 dark:text-white">${escapeHtml(check.name)}</span>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${escapeHtml(check.detail)}</p>
       </div>
-      ${check.link ? `<a href="${check.link}" target="_blank" rel="noopener"
+      ${safeLinkHref ? `<a href="${escapeHtml(safeLinkHref)}" target="_blank" rel="noopener"
           class="text-xs text-indigo-500 hover:underline flex-shrink-0">View →</a>` : ''}
     </div>
   `
@@ -207,8 +232,8 @@ function renderCheck(check: Check): string {
 function detailRow(label: string, value: string, mono = false): string {
   return `
     <div>
-      <span class="text-gray-500 font-medium">${label}</span>
-      <p class="mt-0.5 ${mono ? 'font-mono break-all' : ''} text-gray-700 dark:text-gray-300">${value}</p>
+      <span class="text-gray-500 font-medium">${escapeHtml(label)}</span>
+      <p class="mt-0.5 ${mono ? 'font-mono break-all' : ''} text-gray-700 dark:text-gray-300">${escapeHtml(value)}</p>
     </div>
   `
 }
