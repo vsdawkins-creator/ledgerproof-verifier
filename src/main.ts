@@ -33,9 +33,6 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
       <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
         Independently verify that a published entry exists, was signed by the declared publisher,
         and is included in a Merkle tree anchored to Bitcoin.
-        <a href="https://github.com/vsdawkins-creator/ledgerproof-verifier"
-           target="_blank" rel="noopener"
-           class="text-indigo-500 hover:underline ml-1">Source code →</a>
       </p>
     </header>
 
@@ -60,16 +57,12 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 
     <footer class="mt-16 pt-6 border-t border-gray-200 dark:border-gray-800 text-xs text-gray-400 text-center space-y-1">
       <p>This verifier performs all cryptographic checks in your browser using
-         <a href="https://github.com/paulmillr/noble-ed25519" class="hover:underline" target="_blank" rel="noopener">@noble/ed25519</a>
-         and
-         <a href="https://github.com/paulmillr/noble-hashes" class="hover:underline" target="_blank" rel="noopener">@noble/hashes</a>.
+         @noble/ed25519 and @noble/hashes.
          Bitcoin confirmation data is fetched from
          <a href="https://mempool.space" class="hover:underline" target="_blank" rel="noopener">mempool.space</a>
          with <a href="https://blockstream.info" class="hover:underline" target="_blank" rel="noopener">blockstream.info</a> as fallback.
       </p>
-      <p>Apache 2.0 ·
-         <a href="https://github.com/vsdawkins-creator/ledgerproof-verifier" class="hover:underline" target="_blank" rel="noopener">GitHub</a>
-      </p>
+      <p>LedgerProof℠ · <a href="https://ledgerproofhq.io" class="hover:underline" target="_blank" rel="noopener">ledgerproofhq.io</a></p>
     </footer>
   </div>
 `
