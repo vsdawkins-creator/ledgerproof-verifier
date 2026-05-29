@@ -1,0 +1,7 @@
+{
+  "_comment": "Maps human-readable slugs to entry sequence numbers. The verifier at /r/<slug> resolves the slug via this file, pre-fills the input, and auto-runs verification. Update the integer value once the corresponding entry has been issued through the publisher portal. A null value means 'slug reserved but not yet issued'.",
+  "_schema": {
+    "$slug": "number | null"
+  },
+  "founding-declaration": null
+}

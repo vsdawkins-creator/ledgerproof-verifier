@@ -22,15 +22,21 @@ function safeHref(url: string | undefined): string | null {
   return url.startsWith('https://') ? url : null
 }
 
-// ── URL hash routing: #/<sequence> auto-verifies on load ──────────────────────
+// ── URL routing ──────────────────────────────────────────────────────────────
+// Two routes auto-verify on load:
+//   #/<sequence>   — direct sequence number in URL hash (e.g., #/42)
+//   /r/<slug>      — human-readable slug resolved via /aliases.json
+// The slug → sequence map lives in public/aliases.json and is updated whenever
+// a new canonical entry is issued. Slugs with a null value are reserved but
+// not yet issued; the resolver shows a friendly placeholder in that case.
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div class="max-w-2xl mx-auto px-6 py-12">
     <header class="mb-10">
-      <h1 class="text-2xl font-semibold text-gray-900 dark:text-white tracking-tight">
+      <h1 class="text-2xl font-semibold text-navy tracking-tight">
         LedgerProof Verifier
       </h1>
-      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+      <p class="mt-1 text-sm" style="color: var(--color-navy-soft)">
         Independently verify that a published entry exists, was signed by the declared publisher,
         and is included in a Merkle tree anchored to Bitcoin.
       </p>
@@ -42,20 +48,21 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
         type="number"
         min="0"
         placeholder="Entry sequence number"
-        class="flex-1 px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm
-               bg-white dark:bg-gray-900 text-gray-900 dark:text-white
-               focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        class="flex-1 px-4 py-2.5 border rounded-lg text-sm bg-cream text-navy
+               focus:outline-none focus:ring-2 focus:ring-mint"
+        style="border-color: var(--color-navy-faint)"
       />
       <button type="submit"
-        class="px-5 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium
-               hover:bg-indigo-700 transition whitespace-nowrap">
+        class="px-5 py-2.5 bg-navy text-cream rounded-lg text-sm font-medium
+               hover:bg-mint-deep transition whitespace-nowrap">
         Verify
       </button>
     </form>
 
     <div id="result"></div>
 
-    <footer class="mt-16 pt-6 border-t border-gray-200 dark:border-gray-800 text-xs text-gray-400 text-center space-y-1">
+    <footer class="mt-16 pt-6 border-t text-xs text-center space-y-1"
+            style="border-color: var(--color-navy-faint); color: var(--color-navy-soft)">
       <p>This verifier performs all cryptographic checks in your browser using
          @noble/ed25519 and @noble/hashes.
          Bitcoin confirmation data is fetched from
@@ -81,18 +88,80 @@ form.addEventListener('submit', async (e) => {
   await runVerification(seq)
 })
 
-// Auto-verify if URL hash contains a sequence: #/42
+// Slug → sequence resolver. Loaded once on page load; the SPA serves a single
+// HTML shell at every path, so we have to consult window.location.pathname
+// ourselves. Defensive: any error in slug resolution falls back to manual entry.
+interface AliasMap { [slug: string]: number | null }
+
+async function loadAliases(): Promise<AliasMap> {
+  try {
+    const res = await fetch('/aliases.json', { cache: 'no-cache' })
+    if (!res.ok) return {}
+    const raw = await res.json()
+    // Strip non-string-key metadata (_comment, _schema) — only retain entries
+    // whose value is a non-negative integer or null.
+    const clean: AliasMap = {}
+    for (const [k, v] of Object.entries(raw)) {
+      if (k.startsWith('_')) continue
+      if (v === null || (typeof v === 'number' && Number.isInteger(v) && v >= 0)) {
+        clean[k] = v as number | null
+      }
+    }
+    return clean
+  } catch {
+    return {}
+  }
+}
+
+function showSlugPending(slug: string) {
+  resultEl.innerHTML = `
+    <div class="p-4 rounded-lg text-sm"
+         style="background-color: rgba(232, 168, 124, 0.15);
+                border: 1px solid var(--color-accent-warm);
+                color: var(--color-navy)">
+      <p class="font-medium">Receipt for "${escapeHtml(slug)}" reserved but not yet issued.</p>
+      <p class="mt-1" style="color: var(--color-navy-soft)">
+        This canonical entry will resolve once it has been anchored.
+        In the meantime, you can verify any other entry by sequence number above.
+      </p>
+    </div>
+  `
+}
+
+function showSlugUnknown(slug: string) {
+  showError(`No receipt registered under the slug "${escapeHtml(slug)}".`)
+}
+
+// Path-based routing — match /r/<slug>
+const pathMatch = window.location.pathname.match(/^\/r\/([a-z0-9][a-z0-9-]*[a-z0-9])\/?$/i)
+// Hash-based routing — match #/<sequence>
 const hashMatch = window.location.hash.match(/^#\/(\d+)$/)
+
 if (hashMatch) {
   const seq = parseInt(hashMatch[1], 10)
   input.value = String(seq)
   runVerification(seq)
+} else if (pathMatch) {
+  const slug = pathMatch[1].toLowerCase()
+  loadAliases().then((aliases) => {
+    if (!(slug in aliases)) {
+      showSlugUnknown(slug)
+      return
+    }
+    const seq = aliases[slug]
+    if (seq === null) {
+      showSlugPending(slug)
+      return
+    }
+    input.value = String(seq)
+    runVerification(seq)
+  })
 }
 
 async function runVerification(seq: number) {
   resultEl.innerHTML = `
     <div class="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400 py-6">
-      <svg class="animate-spin w-4 h-4 text-indigo-500" fill="none" viewBox="0 0 24 24">
+      <svg class="animate-spin w-4 h-4 text-mint" fill="none" viewBox="0 0 24 24">
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
       </svg>
@@ -217,7 +286,7 @@ function renderCheck(check: Check): string {
         <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${escapeHtml(check.detail)}</p>
       </div>
       ${safeLinkHref ? `<a href="${escapeHtml(safeLinkHref)}" target="_blank" rel="noopener"
-          class="text-xs text-indigo-500 hover:underline flex-shrink-0">View →</a>` : ''}
+          class="text-xs text-mint-deep hover:underline flex-shrink-0">View →</a>` : ''}
     </div>
   `
 }
