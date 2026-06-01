@@ -1,0 +1,13 @@
+{
+  "_comment": "Sequences issued during the pre-v1.0 publisher draft period (May 6-17, 2026). These entries are flagged so the verifier renders an explanatory errata card instead of running content-hash verification that would surface stored historical artifacts. The list is append-only and changes only with a Foundation-published errata entry. See spec.ledgerproofhq.io/errata/.",
+  "_schema": {
+    "$sequence": "object with { errata_id, summary, errata_url }"
+  },
+  "0": {
+    "errata_id": "LPR-ERRATA-001",
+    "summary": "Entry #0 stored content_hash does not match any reproducible canonicalization of its stored content. Pre-v1.0 publisher draft artifact. All entries 1+ verify correctly.",
+    "errata_url": "https://spec.ledgerproofhq.io/errata/001",
+    "museum_url": "https://docs.ledgerproofhq.io/entries/0",
+    "supersede_slug": "founding-declaration"
+  }
+}

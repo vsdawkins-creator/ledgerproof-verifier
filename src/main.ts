@@ -132,18 +132,95 @@ function showSlugUnknown(slug: string) {
   showError(`No receipt registered under the slug "${escapeHtml(slug)}".`)
 }
 
-// Path-based routing — match /r/<slug>
-const pathMatch = window.location.pathname.match(/^\/r\/([a-z0-9][a-z0-9-]*[a-z0-9])\/?$/i)
-// Hash-based routing — match #/<sequence>
-const hashMatch = window.location.hash.match(/^#\/(\d+)$/)
+// Pre-v1.0 publisher-draft entry handling. Some early entries were issued
+// before the v1.0 spec was finalized (May 6-17, 2026) and may exhibit stored-
+// value artifacts that the verifier's correctness checks will flag. For those
+// entries we render an explanatory errata card pointing to the canonical
+// Foundation errata document, instead of surfacing a confusing FAIL banner.
+// The pre-v1 list is curated in public/pre-v1-entries.json and is append-only.
+interface PreV1Entry {
+  errata_id: string
+  summary: string
+  errata_url: string
+  museum_url?: string
+  supersede_slug?: string
+}
+type PreV1Map = { [sequence: string]: PreV1Entry }
 
-if (hashMatch) {
-  const seq = parseInt(hashMatch[1], 10)
-  input.value = String(seq)
-  runVerification(seq)
-} else if (pathMatch) {
-  const slug = pathMatch[1].toLowerCase()
-  loadAliases().then((aliases) => {
+async function loadPreV1(): Promise<PreV1Map> {
+  try {
+    const res = await fetch('/pre-v1-entries.json', { cache: 'no-cache' })
+    if (!res.ok) return {}
+    const raw = await res.json()
+    const clean: PreV1Map = {}
+    for (const [k, v] of Object.entries(raw)) {
+      if (k.startsWith('_')) continue
+      if (typeof v === 'object' && v !== null && 'errata_id' in v) {
+        clean[k] = v as PreV1Entry
+      }
+    }
+    return clean
+  } catch {
+    return {}
+  }
+}
+
+function showPreV1Card(seq: number, entry: PreV1Entry) {
+  const supersedeLine = entry.supersede_slug
+    ? `<p class="mt-2"><a href="/r/${escapeHtml(entry.supersede_slug)}"
+            style="color: var(--color-navy); border-bottom: 1px solid var(--color-mint)">
+            Open the canonical replacement: /r/${escapeHtml(entry.supersede_slug)} →
+         </a></p>`
+    : ''
+  const museumLine = entry.museum_url
+    ? `<p class="mt-1"><a href="${escapeHtml(entry.museum_url)}" target="_blank" rel="noopener"
+            style="color: var(--color-navy-soft)">
+            Read the museum page → ${escapeHtml(entry.museum_url)}
+         </a></p>`
+    : ''
+  resultEl.innerHTML = `
+    <div class="p-4 rounded-lg text-sm"
+         style="background-color: rgba(232, 168, 124, 0.15);
+                border: 1px solid var(--color-accent-warm);
+                color: var(--color-navy)">
+      <p class="font-medium">Entry #${seq} — pre-v1.0 publisher-draft artifact</p>
+      <p class="mt-1" style="color: var(--color-navy-soft)">
+        ${escapeHtml(entry.summary)}
+      </p>
+      <p class="mt-2">
+        <a href="${escapeHtml(entry.errata_url)}" target="_blank" rel="noopener"
+           style="color: var(--color-navy); border-bottom: 1px solid var(--color-mint)">
+          See ${escapeHtml(entry.errata_id)} for the full explanation →
+        </a>
+      </p>
+      ${supersedeLine}
+      ${museumLine}
+    </div>
+  `
+}
+
+// Routing — runs on initial load AND on hashchange (so in-tab navigation between
+// #/<sequence> hashes re-triggers verification without a full page reload).
+async function route() {
+  const pathMatch = window.location.pathname.match(/^\/r\/([a-z0-9][a-z0-9-]*[a-z0-9])\/?$/i)
+  const hashMatch = window.location.hash.match(/^#\/(\d+)$/)
+
+  if (hashMatch) {
+    const seq = parseInt(hashMatch[1], 10)
+    input.value = String(seq)
+    const preV1 = await loadPreV1()
+    const entry = preV1[String(seq)]
+    if (entry) {
+      showPreV1Card(seq, entry)
+    } else {
+      runVerification(seq)
+    }
+    return
+  }
+
+  if (pathMatch) {
+    const slug = pathMatch[1].toLowerCase()
+    const [aliases, preV1] = await Promise.all([loadAliases(), loadPreV1()])
     if (!(slug in aliases)) {
       showSlugUnknown(slug)
       return
@@ -153,10 +230,20 @@ if (hashMatch) {
       showSlugPending(slug)
       return
     }
+    const preV1Entry = preV1[String(seq)]
+    if (preV1Entry) {
+      input.value = String(seq)
+      showPreV1Card(seq, preV1Entry)
+      return
+    }
     input.value = String(seq)
     runVerification(seq)
-  })
+  }
 }
+
+// Initial route + listen for in-tab hash navigation
+route()
+window.addEventListener('hashchange', () => { route() })
 
 async function runVerification(seq: number) {
   resultEl.innerHTML = `
