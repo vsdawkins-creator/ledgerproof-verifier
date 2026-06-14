@@ -1,12 +1,14 @@
 import './style.css'
 import { verifyEntry, type VerificationResult, type Check } from './verify'
+import { t, getLang, setLang, langSwitcherHtml, type Lang } from './i18n'
 
 // ── Finding 11: XSS prevention ───────────────────────────────────────────────
 // All values interpolated into innerHTML that originate from API responses
 // (publisher_id, key_id, content_type, entry_hash, check.detail, etc.) must
 // be escaped before insertion. Using textContent where possible is preferable,
 // but for the template-literal rendering pipeline here we sanitise at the
-// interpolation boundary.
+// interpolation boundary. i18n catalog strings are trusted; interpolated
+// params that originate from data/URLs are escaped at the call site.
 function escapeHtml(s: string): string {
   return String(s)
     .replace(/&/g, '&amp;')
@@ -30,15 +32,29 @@ function safeHref(url: string | undefined): string | null {
 // a new canonical entry is issued. Slugs with a null value are reserved but
 // not yet issued; the resolver shows a friendly placeholder in that case.
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
+// Mutable element handles — reassigned by bind() after every shell re-render
+// (language switching re-renders the shell, so handles must be refreshed).
+let form!: HTMLFormElement
+let input!: HTMLInputElement
+let resultEl!: HTMLDivElement
+
+// A closure that re-renders whatever is currently shown, in the active language.
+// Set by every show*/runVerification path; replayed after a language switch so
+// the verdict re-translates without re-fetching from the network.
+let lastRender: (() => void) | null = null
+
+function appShellHtml(): string {
+  return `
   <div class="max-w-2xl mx-auto px-6 py-12">
     <header class="mb-10">
-      <h1 class="text-2xl font-semibold text-navy tracking-tight">
-        LedgerProof Verifier
-      </h1>
+      <div class="flex items-start justify-between gap-4">
+        <h1 class="text-2xl font-semibold text-navy tracking-tight">
+          ${t('app.h1')}
+        </h1>
+        ${langSwitcherHtml()}
+      </div>
       <p class="mt-1 text-sm" style="color: var(--color-navy-soft)">
-        Independently verify that a published entry exists, was signed by the declared publisher,
-        and is included in a Merkle tree anchored to Bitcoin.
+        ${t('app.intro')}
       </p>
     </header>
 
@@ -47,7 +63,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
         id="seq-input"
         type="number"
         min="0"
-        placeholder="Entry sequence number"
+        placeholder="${escapeHtml(t('app.placeholder'))}"
         class="flex-1 px-4 py-2.5 border rounded-lg text-sm bg-cream text-navy
                focus:outline-none focus:ring-2 focus:ring-mint"
         style="border-color: var(--color-navy-faint)"
@@ -55,7 +71,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
       <button type="submit"
         class="px-5 py-2.5 bg-navy text-cream rounded-lg text-sm font-medium
                hover:bg-mint-deep transition whitespace-nowrap">
-        Verify
+        ${t('app.verify')}
       </button>
     </form>
 
@@ -63,34 +79,46 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 
     <footer class="mt-16 pt-6 border-t text-xs text-center space-y-1"
             style="border-color: var(--color-navy-faint); color: var(--color-navy-soft)">
-      <p>This verifier performs all cryptographic checks in your browser using
-         @noble/ed25519 and @noble/hashes.
-         Bitcoin confirmation data is fetched from
-         <a href="https://mempool.space" class="hover:underline" target="_blank" rel="noopener">mempool.space</a>
-         with <a href="https://blockstream.info" class="hover:underline" target="_blank" rel="noopener">blockstream.info</a> as fallback.
-      </p>
+      <p>${t('app.footer1', {
+        mempool: `<a href="https://mempool.space" class="hover:underline" target="_blank" rel="noopener">mempool.space</a>`,
+        blockstream: `<a href="https://blockstream.info" class="hover:underline" target="_blank" rel="noopener">blockstream.info</a>`,
+      })}</p>
       <p>LedgerProof℠ · <a href="https://ledgerproofhq.io" class="hover:underline" target="_blank" rel="noopener">ledgerproofhq.io</a></p>
     </footer>
   </div>
-`
+  `
+}
 
-const form = document.querySelector<HTMLFormElement>('#verify-form')!
-const input = document.querySelector<HTMLInputElement>('#seq-input')!
-const resultEl = document.querySelector<HTMLDivElement>('#result')!
+function bind() {
+  form = document.querySelector<HTMLFormElement>('#verify-form')!
+  input = document.querySelector<HTMLInputElement>('#seq-input')!
+  resultEl = document.querySelector<HTMLDivElement>('#result')!
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault()
-  const seq = parseInt(input.value.trim(), 10)
-  if (isNaN(seq) || seq < 0) {
-    showError('Enter a valid sequence number (0 or greater).')
-    return
-  }
-  await runVerification(seq)
-})
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const seq = parseInt(input.value.trim(), 10)
+    if (isNaN(seq) || seq < 0) {
+      showError(t('err.invalidSeq'))
+      return
+    }
+    await runVerification(seq)
+  })
 
-// Slug → sequence resolver. Loaded once on page load; the SPA serves a single
-// HTML shell at every path, so we have to consult window.location.pathname
-// ourselves. Defensive: any error in slug resolution falls back to manual entry.
+  const sw = document.querySelector<HTMLSelectElement>('#lang-switch')
+  sw?.addEventListener('change', () => {
+    const prev = input?.value ?? ''
+    setLang(sw.value as Lang)
+    renderShell()
+    if (prev) input.value = prev
+    if (lastRender) lastRender()
+  })
+}
+
+function renderShell() {
+  document.querySelector<HTMLDivElement>('#app')!.innerHTML = appShellHtml()
+  bind()
+}
+
 interface AliasMap { [slug: string]: number | null }
 
 async function loadAliases(): Promise<AliasMap> {
@@ -114,22 +142,24 @@ async function loadAliases(): Promise<AliasMap> {
 }
 
 function showSlugPending(slug: string) {
-  resultEl.innerHTML = `
+  lastRender = () => {
+    resultEl.innerHTML = `
     <div class="p-4 rounded-lg text-sm"
          style="background-color: rgba(232, 168, 124, 0.15);
                 border: 1px solid var(--color-accent-warm);
                 color: var(--color-navy)">
-      <p class="font-medium">Receipt for "${escapeHtml(slug)}" reserved but not yet issued.</p>
+      <p class="font-medium">${t('slug.pending.title', { slug: escapeHtml(slug) })}</p>
       <p class="mt-1" style="color: var(--color-navy-soft)">
-        This canonical entry will resolve once it has been anchored.
-        In the meantime, you can verify any other entry by sequence number above.
+        ${t('slug.pending.body')}
       </p>
     </div>
   `
+  }
+  lastRender()
 }
 
 function showSlugUnknown(slug: string) {
-  showError(`No receipt registered under the slug "${escapeHtml(slug)}".`)
+  showError(t('slug.unknown', { slug: escapeHtml(slug) }))
 }
 
 // Pre-v1.0 publisher-draft entry handling. Some early entries were issued
@@ -166,37 +196,40 @@ async function loadPreV1(): Promise<PreV1Map> {
 }
 
 function showPreV1Card(seq: number, entry: PreV1Entry) {
-  const supersedeLine = entry.supersede_slug
-    ? `<p class="mt-2"><a href="/r/${escapeHtml(entry.supersede_slug)}"
-            style="color: var(--color-navy); border-bottom: 1px solid var(--color-mint)">
-            Open the canonical replacement: /r/${escapeHtml(entry.supersede_slug)} →
-         </a></p>`
-    : ''
-  const museumLine = entry.museum_url
-    ? `<p class="mt-1"><a href="${escapeHtml(entry.museum_url)}" target="_blank" rel="noopener"
-            style="color: var(--color-navy-soft)">
-            Read the museum page → ${escapeHtml(entry.museum_url)}
-         </a></p>`
-    : ''
-  resultEl.innerHTML = `
+  lastRender = () => {
+    const supersedeLine = entry.supersede_slug
+      ? `<p class="mt-2"><a href="/r/${escapeHtml(entry.supersede_slug)}"
+              style="color: var(--color-navy); border-bottom: 1px solid var(--color-mint)">
+              ${t('prev1.supersede', { slug: escapeHtml(entry.supersede_slug) })}
+           </a></p>`
+      : ''
+    const museumLine = entry.museum_url
+      ? `<p class="mt-1"><a href="${escapeHtml(entry.museum_url)}" target="_blank" rel="noopener"
+              style="color: var(--color-navy-soft)">
+              ${t('prev1.museum', { url: escapeHtml(entry.museum_url) })}
+           </a></p>`
+      : ''
+    resultEl.innerHTML = `
     <div class="p-4 rounded-lg text-sm"
          style="background-color: rgba(232, 168, 124, 0.15);
                 border: 1px solid var(--color-accent-warm);
                 color: var(--color-navy)">
-      <p class="font-medium">Entry #${seq} — pre-v1.0 publisher-draft artifact</p>
+      <p class="font-medium">${t('prev1.title', { seq })}</p>
       <p class="mt-1" style="color: var(--color-navy-soft)">
         ${escapeHtml(entry.summary)}
       </p>
       <p class="mt-2">
         <a href="${escapeHtml(entry.errata_url)}" target="_blank" rel="noopener"
            style="color: var(--color-navy); border-bottom: 1px solid var(--color-mint)">
-          See ${escapeHtml(entry.errata_id)} for the full explanation →
+          ${t('prev1.errata', { id: escapeHtml(entry.errata_id) })}
         </a>
       </p>
       ${supersedeLine}
       ${museumLine}
     </div>
   `
+  }
+  lastRender()
 }
 
 // Routing — runs on initial load AND on hashchange (so in-tab navigation between
@@ -241,36 +274,37 @@ async function route() {
   }
 }
 
-// Initial route + listen for in-tab hash navigation
-route()
-window.addEventListener('hashchange', () => { route() })
-
 async function runVerification(seq: number) {
+  lastRender = null
   resultEl.innerHTML = `
     <div class="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400 py-6">
       <svg class="animate-spin w-4 h-4 text-mint" fill="none" viewBox="0 0 24 24">
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
       </svg>
-      Verifying entry #${seq}…
+      ${t('loading', { seq })}
     </div>
   `
 
   try {
     const result = await verifyEntry(seq)
-    resultEl.innerHTML = renderResult(result)
+    lastRender = () => { resultEl.innerHTML = renderResult(result) }
+    lastRender()
   } catch (err) {
-    showError(`Verification failed: ${err instanceof Error ? err.message : String(err)}`)
+    showError(t('err.verifyFailed', { msg: err instanceof Error ? err.message : String(err) }))
   }
 }
 
 function showError(msg: string) {
-  resultEl.innerHTML = `
+  lastRender = () => {
+    resultEl.innerHTML = `
     <div class="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800
                 rounded-lg text-sm text-red-700 dark:text-red-400">
       ${msg}
     </div>
   `
+  }
+  lastRender()
 }
 
 function renderResult(r: VerificationResult): string {
@@ -279,31 +313,31 @@ function renderResult(r: VerificationResult): string {
   const statusBadge = overallStatus === 'verified'
     ? `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium
                     bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
-         ✓ Verified
+         ${t('badge.verified')}
        </span>`
     : overallStatus === 'failed'
     ? `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium
                     bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
-         ✗ Failed
+         ${t('badge.failed')}
        </span>`
     : `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium
                     bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">
-         ⚠ Partial
+         ${t('badge.partial')}
        </span>`
 
   const anchorTxid = receipt?.anchor_txid ? escapeHtml(receipt.anchor_txid) : null
   const anchorSection = receipt?.anchor_status === 'confirmed' && anchorTxid
     ? `<div class="mt-4 p-3 bg-orange-50 dark:bg-orange-900/10 border border-orange-200
                    dark:border-orange-800 rounded-lg text-xs space-y-1">
-         <p class="font-medium text-orange-800 dark:text-orange-400">Bitcoin Anchor</p>
+         <p class="font-medium text-orange-800 dark:text-orange-400">${t('anchor.title')}</p>
          <p class="font-mono break-all text-gray-600 dark:text-gray-400">
            <a href="https://mempool.space/tx/${anchorTxid}" target="_blank" rel="noopener"
               class="hover:underline text-orange-600 dark:text-orange-400">${anchorTxid}</a>
          </p>
          <p class="text-gray-500">
-           Block ${receipt!.anchor_block_height ?? '—'}
-           ${confirmations != null ? `· ${confirmations} confirmation${confirmations !== 1 ? 's' : ''}` : ''}
-           ${receipt!.anchored_at ? `· ${new Date(receipt!.anchored_at).toLocaleString()}` : ''}
+           ${t('anchor.block', { h: receipt!.anchor_block_height ?? '—' })}
+           ${confirmations != null ? `· ${t('confirmations', { n: confirmations })}` : ''}
+           ${receipt!.anchored_at ? `· ${new Date(receipt!.anchored_at).toLocaleString(getLang())}` : ''}
          </p>
        </div>`
     : ''
@@ -313,9 +347,9 @@ function renderResult(r: VerificationResult): string {
       <!-- Header -->
       <div class="flex items-start justify-between gap-4">
         <div>
-          <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Entry #${entry.sequence}</h2>
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-white">${t('result.entry', { seq: entry.sequence })}</h2>
           <p class="text-xs text-gray-500 mt-0.5">
-            ${escapeHtml(entry.publisher_id)} · ${new Date(entry.entry_timestamp).toLocaleString()}
+            ${escapeHtml(entry.publisher_id)} · ${new Date(entry.entry_timestamp).toLocaleString(getLang())}
           </p>
         </div>
         ${statusBadge}
@@ -335,17 +369,17 @@ function renderResult(r: VerificationResult): string {
           <svg class="w-3.5 h-3.5 transition group-open:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
           </svg>
-          Entry details
+          ${t('details.summary')}
         </summary>
         <div class="mt-3 space-y-2 text-xs">
-          ${detailRow('Entry hash', entry.entry_hash, true)}
-          ${detailRow('Prev hash', entry.prev_hash, true)}
-          ${detailRow('Signature', entry.signature, true)}
-          ${detailRow('Key ID', entry.key_id)}
-          ${detailRow('Protocol', entry.protocol_version)}
-          ${detailRow('Content type', entry.content_type)}
+          ${detailRow(t('detail.entryHash'), entry.entry_hash, true)}
+          ${detailRow(t('detail.prevHash'), entry.prev_hash, true)}
+          ${detailRow(t('detail.signature'), entry.signature, true)}
+          ${detailRow(t('detail.keyId'), entry.key_id)}
+          ${detailRow(t('detail.protocol'), entry.protocol_version)}
+          ${detailRow(t('detail.contentType'), entry.content_type)}
           <div>
-            <span class="text-gray-500 font-medium">Content</span>
+            <span class="text-gray-500 font-medium">${t('detail.content')}</span>
             <pre class="mt-1 p-2 bg-gray-50 dark:bg-gray-800 rounded text-gray-800 dark:text-gray-200
                         overflow-x-auto font-mono">${escapeHtml(JSON.stringify(entry.content, null, 2))}</pre>
           </div>
@@ -364,16 +398,18 @@ function renderCheck(check: Check): string {
 
   // Validate link URL — only allow https:// to prevent javascript: injection
   const safeLinkHref = safeHref(check.link)
+  const name = check.nameKey ? t(check.nameKey, undefined, check.name) : check.name
+  const detail = check.detailKey ? t(check.detailKey, check.detailParams, check.detail) : check.detail
 
   return `
     <div class="flex items-start gap-3 px-4 py-3 text-sm">
       <span class="mt-0.5 text-base leading-none flex-shrink-0">${icon}</span>
       <div class="flex-1 min-w-0">
-        <span class="font-medium text-gray-900 dark:text-white">${escapeHtml(check.name)}</span>
-        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${escapeHtml(check.detail)}</p>
+        <span class="font-medium text-gray-900 dark:text-white">${escapeHtml(name)}</span>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${escapeHtml(detail)}</p>
       </div>
       ${safeLinkHref ? `<a href="${escapeHtml(safeLinkHref)}" target="_blank" rel="noopener"
-          class="text-xs text-mint-deep hover:underline flex-shrink-0">View →</a>` : ''}
+          class="text-xs text-mint-deep hover:underline flex-shrink-0">${t('check.view')}</a>` : ''}
     </div>
   `
 }
@@ -386,3 +422,9 @@ function detailRow(label: string, value: string, mono = false): string {
     </div>
   `
 }
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+document.documentElement.lang = getLang()
+renderShell()
+route()
+window.addEventListener('hashchange', () => { route() })
