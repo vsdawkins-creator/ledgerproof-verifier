@@ -235,7 +235,7 @@ function showPreV1Card(seq: number, entry: PreV1Entry) {
 // Routing — runs on initial load AND on hashchange (so in-tab navigation between
 // #/<sequence> hashes re-triggers verification without a full page reload).
 async function route() {
-  const pathMatch = window.location.pathname.match(/^\/r\/([a-z0-9][a-z0-9-]*[a-z0-9])\/?$/i)
+  const pathMatch = window.location.pathname.match(/^\/r\/([a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\/?$/i)
   const hashMatch = window.location.hash.match(/^#\/(\d+)$/)
 
   if (hashMatch) {
@@ -253,6 +253,17 @@ async function route() {
 
   if (pathMatch) {
     const slug = pathMatch[1].toLowerCase()
+    // A purely-numeric slug is a raw entry sequence (e.g. /r/16). The canonical
+    // sequence route is #/<seq>, but the Vault/scanner currently emits /r/<seq> —
+    // verify it directly so those links resolve. Named slugs still use aliases.
+    if (/^\d+$/.test(slug)) {
+      const seq = parseInt(slug, 10)
+      input.value = String(seq)
+      const preV1 = await loadPreV1()
+      const entry = preV1[String(seq)]
+      if (entry) { showPreV1Card(seq, entry) } else { runVerification(seq) }
+      return
+    }
     const [aliases, preV1] = await Promise.all([loadAliases(), loadPreV1()])
     if (!(slug in aliases)) {
       showSlugUnknown(slug)
