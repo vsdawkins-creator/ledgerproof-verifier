@@ -66,29 +66,64 @@ export function verifyMerkleProof(
   }
 }
 
-/** Parse and verify a LedgerProof OP_RETURN payload.
- * Format (44 bytes): 4-byte magic + 4-byte seq_start BE + 4-byte seq_end BE + 32-byte merkle_root.
- * Two magics share this identical layout and MUST both be accepted so the full on-chain
- * history verifies: "LPR1" (canonical, LPR v1.0+) and the legacy "QE20" (pre-v1 forensic
- * anchors). See LPR-VER-001 — the OP_RETURN tag policy permits QE20 (pre-v1) and LPR1 (v1.0+).
- * Returns parsed fields (including which magic was found) or null if invalid.
+/** Parse a LedgerProof OP_RETURN payload, LENGTH-DISCRIMINATING the known layouts.
+ * A parser MUST branch on the exact byte length before reading any root — the root sits
+ * at a different offset in each layout, so treating a 68-byte payload as "a 44 with trailing
+ * data" would read a garbage window straddling two roots.
+ *
+ *   44 bytes: MAGIC || seq_start(u32 BE) || seq_end(u32 BE) || root(32)   — deployed legacy, root@12.
+ *             MAGIC ∈ {"LPR1" (v1.0+), "QE20" (pre-v1 forensic)}.
+ *   68 bytes: "LPR1" || legacy_root(32) || scitt_root(32)                 — combined SCITT, legacy@4 / scitt@36, no seq.
+ *   36 bytes: "LPR1" || root(32)                                          — single-root (legacy-only or SCITT-only window).
+ *
+ * `merkleRoot` is always the LEGACY/primary root the legacy receipt's Merkle proof reproduces
+ * (offset 12 for 44-byte, offset 4 for 68/36-byte). `scittRoot` is the SCITT root when the
+ * combined layout carries one, else null. `seqStart`/`seqEnd` are null for layouts without them.
+ * See LPR-VER-001 (OP_RETURN tag policy) + the SCITT profile §6.
  */
 export function parseOpReturn(payloadHex: string): {
   magic: string
-  seqStart: number
-  seqEnd: number
+  seqStart: number | null
+  seqEnd: number | null
   merkleRoot: string
+  scittRoot: string | null
 } | null {
   try {
     const bytes = hexToBytes(payloadHex)
-    if (bytes.length < 44) return null
+    if (bytes.length < 4) return null
     const magic = String.fromCharCode(...bytes.slice(0, 4))
-    if (magic !== 'QE20' && magic !== 'LPR1') return null
-    const view = new DataView(bytes.buffer, bytes.byteOffset)
-    const seqStart = view.getUint32(4, false)
-    const seqEnd = view.getUint32(8, false)
-    const merkleRoot = bytesToHex(bytes.slice(12, 44))
-    return { magic, seqStart, seqEnd, merkleRoot }
+    if (bytes.length === 44) {
+      if (magic !== 'QE20' && magic !== 'LPR1') return null
+      const view = new DataView(bytes.buffer, bytes.byteOffset)
+      return {
+        magic,
+        seqStart: view.getUint32(4, false),
+        seqEnd: view.getUint32(8, false),
+        merkleRoot: bytesToHex(bytes.slice(12, 44)),
+        scittRoot: null,
+      }
+    }
+    if (bytes.length === 68) {
+      if (magic !== 'LPR1') return null
+      return {
+        magic,
+        seqStart: null,
+        seqEnd: null,
+        merkleRoot: bytesToHex(bytes.slice(4, 36)),
+        scittRoot: bytesToHex(bytes.slice(36, 68)),
+      }
+    }
+    if (bytes.length === 36) {
+      if (magic !== 'LPR1') return null
+      return {
+        magic,
+        seqStart: null,
+        seqEnd: null,
+        merkleRoot: bytesToHex(bytes.slice(4, 36)),
+        scittRoot: null,
+      }
+    }
+    return null
   } catch {
     return null
   }

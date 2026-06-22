@@ -172,14 +172,29 @@ export async function verifyEntry(sequence: number): Promise<VerificationResult>
       if (opReturnHex) {
         const parsed = parseOpReturn(opReturnHex)
         if (parsed) {
-          checks.push({
-            name: 'OP_RETURN magic + range',
-            nameKey: 'check.opReturnMagic',
-            status: 'pass',
-            detail: `${parsed.magic} magic ✓ · seq ${parsed.seqStart}–${parsed.seqEnd} · root ${parsed.merkleRoot.slice(0, 12)}…`,
-            detailKey: 'cd.opReturnMagic.pass',
-            detailParams: { magic: parsed.magic, a: parsed.seqStart, b: parsed.seqEnd, r: parsed.merkleRoot.slice(0, 12) },
-          })
+          const rootShort = parsed.merkleRoot.slice(0, 12)
+          if (parsed.seqStart !== null && parsed.seqEnd !== null) {
+            // 44-byte deployed layout — show the sequence range (fully localized).
+            checks.push({
+              name: 'OP_RETURN magic + range',
+              nameKey: 'check.opReturnMagic',
+              status: 'pass',
+              detail: `${parsed.magic} magic ✓ · seq ${parsed.seqStart}–${parsed.seqEnd} · root ${rootShort}…`,
+              detailKey: 'cd.opReturnMagic.pass',
+              detailParams: { magic: parsed.magic, a: parsed.seqStart, b: parsed.seqEnd, r: rootShort },
+            })
+          } else {
+            // 68-byte combined (legacy+SCITT) or 36-byte single-root — no seq range.
+            const layout = parsed.scittRoot !== null ? 'combined (legacy+SCITT)' : 'single-root'
+            checks.push({
+              name: 'OP_RETURN magic + range',
+              nameKey: 'check.opReturnMagic',
+              status: 'pass',
+              detail: `${parsed.magic} magic ✓ · ${layout} · root ${rootShort}…`,
+              detailKey: 'cd.opReturnMagic.passLayout',
+              detailParams: { magic: parsed.magic, layout, r: rootShort },
+            })
+          }
 
           // Verify Merkle proof against on-chain root
           const merkleValid = verifyMerkleProof(entry.entry_hash, receipt.merkle_proof!, parsed.merkleRoot)
