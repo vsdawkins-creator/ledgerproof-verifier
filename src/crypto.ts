@@ -66,11 +66,15 @@ export function verifyMerkleProof(
   }
 }
 
-/** Parse and verify the QE20 OP_RETURN payload.
- * Format: 4-byte magic "QE20" + 4-byte seq_start BE + 4-byte seq_end BE + 32-byte merkle_root
- * Returns parsed fields or null if invalid.
+/** Parse and verify a LedgerProof OP_RETURN payload.
+ * Format (44 bytes): 4-byte magic + 4-byte seq_start BE + 4-byte seq_end BE + 32-byte merkle_root.
+ * Two magics share this identical layout and MUST both be accepted so the full on-chain
+ * history verifies: "LPR1" (canonical, LPR v1.0+) and the legacy "QE20" (pre-v1 forensic
+ * anchors). See LPR-VER-001 — the OP_RETURN tag policy permits QE20 (pre-v1) and LPR1 (v1.0+).
+ * Returns parsed fields (including which magic was found) or null if invalid.
  */
 export function parseOpReturn(payloadHex: string): {
+  magic: string
   seqStart: number
   seqEnd: number
   merkleRoot: string
@@ -79,12 +83,12 @@ export function parseOpReturn(payloadHex: string): {
     const bytes = hexToBytes(payloadHex)
     if (bytes.length < 44) return null
     const magic = String.fromCharCode(...bytes.slice(0, 4))
-    if (magic !== 'QE20') return null
+    if (magic !== 'QE20' && magic !== 'LPR1') return null
     const view = new DataView(bytes.buffer, bytes.byteOffset)
     const seqStart = view.getUint32(4, false)
     const seqEnd = view.getUint32(8, false)
     const merkleRoot = bytesToHex(bytes.slice(12, 44))
-    return { seqStart, seqEnd, merkleRoot }
+    return { magic, seqStart, seqEnd, merkleRoot }
   } catch {
     return null
   }

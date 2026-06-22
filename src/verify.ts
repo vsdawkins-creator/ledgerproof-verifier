@@ -176,9 +176,9 @@ export async function verifyEntry(sequence: number): Promise<VerificationResult>
             name: 'OP_RETURN magic + range',
             nameKey: 'check.opReturnMagic',
             status: 'pass',
-            detail: `QE20 magic ✓ · seq ${parsed.seqStart}–${parsed.seqEnd} · root ${parsed.merkleRoot.slice(0, 12)}…`,
+            detail: `${parsed.magic} magic ✓ · seq ${parsed.seqStart}–${parsed.seqEnd} · root ${parsed.merkleRoot.slice(0, 12)}…`,
             detailKey: 'cd.opReturnMagic.pass',
-            detailParams: { a: parsed.seqStart, b: parsed.seqEnd, r: parsed.merkleRoot.slice(0, 12) },
+            detailParams: { magic: parsed.magic, a: parsed.seqStart, b: parsed.seqEnd, r: parsed.merkleRoot.slice(0, 12) },
           })
 
           // Verify Merkle proof against on-chain root
@@ -198,7 +198,7 @@ export async function verifyEntry(sequence: number): Promise<VerificationResult>
             name: 'OP_RETURN magic + range',
             nameKey: 'check.opReturnMagic',
             status: 'fail',
-            detail: `OP_RETURN payload missing QE20 magic or wrong length (${opReturnHex.length / 2} bytes)`,
+            detail: `OP_RETURN payload missing LPR anchor magic (QE20/LPR1) or wrong length (${opReturnHex.length / 2} bytes)`,
             detailKey: 'cd.opReturnMagic.fail',
             detailParams: { bytes: opReturnHex.length / 2 },
           })
