@@ -259,6 +259,26 @@ export async function verifyEntry(sequence: number): Promise<VerificationResult>
       detail: 'Entry is pending its daily Bitcoin anchor (runs at 02:00 UTC)',
       detailKey: 'cd.bitcoinAnchor.pending',
     })
+  } else if (receipt?.anchor_status === 'confirmed') {
+    // Claims confirmed but is missing anchor_txid or merkle_proof — fail closed.
+    // Never allow a green "verified" badge without an on-chain check that ran.
+    checks.push({
+      name: 'Bitcoin anchor',
+      nameKey: 'check.bitcoinAnchor',
+      status: 'fail',
+      detail: 'Receipt claims confirmed but is missing its anchor transaction or Merkle proof',
+      detailKey: 'cd.bitcoinAnchor.missing',
+    })
+  } else if (receipt) {
+    // Any other / unexpected anchor_status (e.g. "failed", unknown) — surface it.
+    checks.push({
+      name: 'Bitcoin anchor',
+      nameKey: 'check.bitcoinAnchor',
+      status: 'warn',
+      detail: `Unrecognized anchor status: ${String(receipt.anchor_status ?? 'none')}`,
+      detailKey: 'cd.bitcoinAnchor.unknown',
+      detailParams: { s: String(receipt.anchor_status ?? 'none') },
+    })
   }
 
   const failed = checks.filter(c => c.status === 'fail').length
