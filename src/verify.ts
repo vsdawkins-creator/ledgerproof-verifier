@@ -54,19 +54,35 @@ export async function verifyEntry(sequence: number): Promise<VerificationResult>
   // Use content from entry_json_canonical to preserve original key order —
   // PostgreSQL JSONB sorts keys alphabetically, so entry.content would produce a different hash.
   const canonicalEntry = JSON.parse(entry.entry_json_canonical)
-  const contentBytes = new TextEncoder().encode(JSON.stringify(canonicalEntry.content))
-  const computedContentHash = sha256Hex(contentBytes)
-  const contentHashMatch = computedContentHash === entry.content_hash
-  checks.push({
-    name: 'Content hash',
-    nameKey: 'check.contentHash',
-    status: contentHashMatch ? 'pass' : 'fail',
-    detail: contentHashMatch
-      ? `SHA-256(content) = ${entry.content_hash.slice(0, 16)}… ✓`
-      : `Content hash mismatch — content may have been tampered`,
-    detailKey: contentHashMatch ? 'cd.contentHash.pass' : 'cd.contentHash.fail',
-    detailParams: { h: entry.content_hash.slice(0, 16) },
-  })
+  if (canonicalEntry.content === undefined || canonicalEntry.content === null) {
+    // Hash-only entry (Blind Witness, e.g. content_type ledgerproof/witness-envelope,
+    // and the hash-only public record): only the content_hash fingerprint was
+    // submitted — the document never leaves the client, so there is NO content to
+    // recompute. The content_hash is bound into the signed entry, so its integrity is
+    // proven by the signature + Merkle inclusion + Bitcoin anchor, not by re-hashing.
+    checks.push({
+      name: 'Content hash',
+      nameKey: 'check.contentHash',
+      status: 'pass',
+      detail: `Hash-only — only the ${entry.content_hash.slice(0, 16)}… fingerprint was submitted; the content never leaves the client, so there is nothing to re-hash (proven by the signature + anchor)`,
+      detailKey: 'cd.contentHash.witness',
+      detailParams: { h: entry.content_hash.slice(0, 16) },
+    })
+  } else {
+    const contentBytes = new TextEncoder().encode(JSON.stringify(canonicalEntry.content))
+    const computedContentHash = sha256Hex(contentBytes)
+    const contentHashMatch = computedContentHash === entry.content_hash
+    checks.push({
+      name: 'Content hash',
+      nameKey: 'check.contentHash',
+      status: contentHashMatch ? 'pass' : 'fail',
+      detail: contentHashMatch
+        ? `SHA-256(content) = ${entry.content_hash.slice(0, 16)}… ✓`
+        : `Content hash mismatch — content may have been tampered`,
+      detailKey: contentHashMatch ? 'cd.contentHash.pass' : 'cd.contentHash.fail',
+      detailParams: { h: entry.content_hash.slice(0, 16) },
+    })
+  }
 
   // ── 4. Fetch publisher key ────────────────────────────────────────────────
   let key: KeyRow | null = null
