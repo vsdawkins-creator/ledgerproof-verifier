@@ -94,13 +94,17 @@ export async function verifyEntry(sequence: number): Promise<VerificationResult>
 
   // ── 5. Verify Ed25519 signature ───────────────────────────────────────────
   if (key) {
-    const sigValid = await verifyEd25519(entry.entry_hash, entry.signature, key.verifying_key_b64)
+    // The signer signs the CANONICAL ENTRY JSON bytes (whose SHA-256 *is*
+    // entry_hash), NOT the entry_hash bytes. Verify Ed25519 over the canonical
+    // UTF-8 message (hex-encoded, since verifyEd25519 hex-decodes its message arg).
+    const messageHex = Array.from(new TextEncoder().encode(entry.entry_json_canonical), (b) => b.toString(16).padStart(2, '0')).join('')
+    const sigValid = await verifyEd25519(messageHex, entry.signature, key.verifying_key_b64)
     checks.push({
       name: 'Ed25519 signature',
       nameKey: 'check.ed25519',
       status: sigValid ? 'pass' : 'fail',
       detail: sigValid
-        ? `Signature over entry_hash verified against ${entry.key_id} ✓`
+        ? `Signature over the canonical entry verified against ${entry.key_id} ✓`
         : `Signature INVALID — entry may have been tampered`,
       detailKey: sigValid ? 'cd.ed25519.pass' : 'cd.ed25519.fail',
       detailParams: { kid: entry.key_id },
