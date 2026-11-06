@@ -22,6 +22,7 @@ const EN: Dict = {
   // Errors & routing states
   'err.invalidSeq': 'Enter a valid sequence number (0 or greater).',
   'err.verifyFailed': 'Verification failed: {msg}',
+  'err.apiUnavailable': 'Look-up is unavailable — the record API did not answer. This says nothing about a proof you already hold: switch to “{bundle}”, which needs no server at all.',
   'slug.pending.title': 'Receipt for “{slug}” reserved but not yet issued.',
   'slug.pending.body': 'This canonical entry will resolve once it has been anchored. In the meantime, you can verify any other entry by sequence number above.',
   'slug.unknown': 'No receipt registered under the slug “{slug}”.',
@@ -140,6 +141,7 @@ const DE: Dict = {
   'app.footer1': 'Dieser Verifizierer führt alle kryptografischen Prüfungen in Ihrem Browser mit @noble/ed25519 und @noble/hashes durch. Bitcoin-Bestätigungsdaten werden von {mempool} mit {blockstream} als Ausweichquelle abgerufen.',
   'err.invalidSeq': 'Geben Sie eine gültige Sequenznummer ein (0 oder größer).',
   'err.verifyFailed': 'Verifizierung fehlgeschlagen: {msg}',
+  'err.apiUnavailable': 'Die Suche ist nicht verfügbar — die Record-API hat nicht geantwortet. Über einen bereits vorliegenden Nachweis sagt das nichts aus: Wechseln Sie zu „{bundle}“, wofür überhaupt kein Server nötig ist.',
   'slug.pending.title': 'Beleg für „{slug}“ reserviert, aber noch nicht ausgestellt.',
   'slug.pending.body': 'Dieser kanonische Eintrag wird auflösbar, sobald er verankert wurde. In der Zwischenzeit können Sie oben jeden anderen Eintrag per Sequenznummer verifizieren.',
   'slug.unknown': 'Kein Beleg unter dem Slug „{slug}“ registriert.',
@@ -255,6 +257,7 @@ const FR: Dict = {
   'app.footer1': 'Ce vérificateur effectue toutes les vérifications cryptographiques dans votre navigateur avec @noble/ed25519 et @noble/hashes. Les données de confirmation Bitcoin proviennent de {mempool}, avec {blockstream} en secours.',
   'err.invalidSeq': 'Saisissez un numéro de séquence valide (0 ou plus).',
   'err.verifyFailed': 'Échec de la vérification : {msg}',
+  'err.apiUnavailable': 'La recherche est indisponible — l’API du registre n’a pas répondu. Cela ne dit rien d’une preuve que vous détenez déjà : passez à « {bundle} », qui ne nécessite aucun serveur.',
   'slug.pending.title': 'Reçu pour « {slug} » réservé mais pas encore émis.',
   'slug.pending.body': 'Cette entrée canonique deviendra résolvable une fois ancrée. En attendant, vous pouvez vérifier toute autre entrée par numéro de séquence ci-dessus.',
   'slug.unknown': 'Aucun reçu enregistré sous le slug « {slug} ».',

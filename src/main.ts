@@ -1,5 +1,6 @@
 import './style.css'
 import { verifyEntry, type VerificationResult, type Check } from './verify'
+import { ApiUnavailableError } from './api'
 import { verifyBundle, type EvidenceVerdict, type VerdictCheck } from './proofBundle'
 import { confirmAnchorOnChain, type ChainConfirmation } from './proofBundleChain'
 import { t, getLang, setLang, langSwitcherHtml, type Lang } from './i18n'
@@ -422,7 +423,14 @@ async function runVerification(seq: number) {
     lastRender = () => { resultEl.innerHTML = renderResult(result) }
     lastRender()
   } catch (err) {
-    showError(t('err.verifyFailed', { msg: err instanceof Error ? err.message : String(err) }))
+    // Look-up is the only path that needs our servers. When they are the
+    // problem, say so and point at the mode that never needs them — never
+    // report "verification failed", which implies doubt about the evidence.
+    if (err instanceof ApiUnavailableError) {
+      showError(t('err.apiUnavailable', { bundle: t('mode.bundle') }))
+    } else {
+      showError(t('err.verifyFailed', { msg: err instanceof Error ? err.message : String(err) }))
+    }
   }
 }
 
