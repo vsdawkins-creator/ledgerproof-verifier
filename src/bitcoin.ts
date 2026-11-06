@@ -67,16 +67,20 @@ export function extractOpReturn(tx: TxInfo): string | null {
       // scriptpubkey format: 6a <len> <data> — strip the 6a and pushdata prefix
       const script = out.scriptpubkey
       if (!script.startsWith('6a')) return null
-      // Skip OP_RETURN (6a) and the push opcode byte(s)
+      // Skip OP_RETURN (6a) and the push opcode byte(s). Return EXACTLY the
+      // declared push length rather than all remaining script hex, so a multi-push
+      // or padded OP_RETURN can't cause an over-read (for the real LPR1 anchor
+      // formats — a single direct push ≤ 75 bytes — this is identical to before).
       const afterOpReturn = script.slice(2)
       const firstByte = parseInt(afterOpReturn.slice(0, 2), 16)
       if (firstByte <= 75) {
-        // direct push: next byte is length, then data
-        return afterOpReturn.slice(2)
+        // direct push: firstByte is the data length in bytes
+        return afterOpReturn.slice(2, 2 + firstByte * 2)
       }
       if (firstByte === 0x4c) {
-        // OP_PUSHDATA1: skip 1 length byte
-        return afterOpReturn.slice(4)
+        // OP_PUSHDATA1: next byte is the data length
+        const len = parseInt(afterOpReturn.slice(2, 4), 16)
+        return afterOpReturn.slice(4, 4 + len * 2)
       }
       return afterOpReturn.slice(2)
     }

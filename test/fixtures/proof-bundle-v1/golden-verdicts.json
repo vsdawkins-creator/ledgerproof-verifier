@@ -1,0 +1,2198 @@
+{
+  "v": "ledgerproof/evidence-verdict-goldens/1",
+  "note": "Frozen expected verdict projections (SPEC-EVIDENCE-VERDICT §3), one per conformance vector, keyed by vector name. A conforming verifier's projection must be byte-identical under canonical JSON. Generated once at v1 freeze; regeneration is a spec change.",
+  "projections": {
+    "valid": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "PROVEN",
+      "confidence": "cryptographic",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "tampered-document-hash": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "NOT_PROVEN",
+      "confidence": "none",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d0",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": false
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "tampered-inclusion-proof": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "NOT_PROVEN",
+      "confidence": "none",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": false
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "wrong-leaf-index": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "NOT_PROVEN",
+      "confidence": "none",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": false
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "wrong-tree-size": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "NOT_PROVEN",
+      "confidence": "none",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": false
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "IMPLEMENTER-TRAP-anchor-tree-hashed-as-rfc6962": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "PROVEN",
+      "confidence": "cryptographic",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "IMPLEMENTER-TRAP-document-tree-hashed-as-bitcoin": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "PROVEN",
+      "confidence": "cryptographic",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "IMPLEMENTER-TRAP-direction-from-flag-not-index": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "PROVEN",
+      "confidence": "cryptographic",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "entry-does-not-commit-to-batch-root": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "NOT_PROVEN",
+      "confidence": "none",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": false
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": false
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "tampered-entry-canonical-json": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "NOT_PROVEN",
+      "confidence": "none",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": false
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "tampered-anchor-proof": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "NOT_PROVEN",
+      "confidence": "none",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": false
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "flipped-anchor-direction": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "NOT_PROVEN",
+      "confidence": "none",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": false
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "op-return-root-mismatch": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "NOT_PROVEN",
+      "confidence": "none",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": false
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "sequence-outside-anchored-range": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "NOT_PROVEN",
+      "confidence": "none",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": false
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "claim-overstates-attested-time": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "NOT_PROVEN",
+      "confidence": "none",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-03-03T00:00:00Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 0
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": false
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "claim-marks-observation-attested": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "NOT_PROVEN",
+      "confidence": "none",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": false
+        }
+      ]
+    },
+    "malformed-hex-document-sha256": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "NOT_PROVEN",
+      "confidence": "none",
+      "claim": {
+        "sha256": "zz586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": false
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "malformed-hex-op-return-payload": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "NOT_PROVEN",
+      "confidence": "none",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": false
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": false
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": false
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": false
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "missing-required-section": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "MALFORMED",
+      "confidence": "none",
+      "claim": null,
+      "subject": null,
+      "anchor": null,
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        }
+      ]
+    },
+    "required-section-not-an-object": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "MALFORMED",
+      "confidence": "none",
+      "claim": null,
+      "subject": null,
+      "anchor": null,
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        }
+      ]
+    },
+    "duplicate-key-last-wins": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "NOT_PROVEN",
+      "confidence": "none",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d0",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": false
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "duplicate-key-smuggling": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "PROVEN",
+      "confidence": "cryptographic",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "integer-tree-size-beyond-2p53": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "NOT_PROVEN",
+      "confidence": "none",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": false
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": false
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "non-integer-tree-size": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "NOT_PROVEN",
+      "confidence": "none",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": false
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": false
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "negative-leaf-index": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "NOT_PROVEN",
+      "confidence": "none",
+      "claim": {
+        "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+        "proven_no_later_than": "2026-07-02T03:30:09Z",
+        "observed_on": "2026-03-03",
+        "observation_attested": false,
+        "attestation_gap_days": 121
+      },
+      "subject": {
+        "native_id": "BOE-A-2026-4974",
+        "source": "es-boe",
+        "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representación procesal del sindicato Confederación General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilación en el sistema de la Seguridad Social mediante la aplicación de coeficientes reductores, anulando (i) el artículo 10.2.a); y ,(ii) artículo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificación fiscal en la solicitud de inicio del procedimiento previo."
+      },
+      "anchor": {
+        "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+        "block_height": 956302,
+        "block_time": "2026-07-02T03:30:09Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": false
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    },
+    "attribution-not-established": {
+      "v": "ledgerproof/evidence-verdict/1",
+      "spec": "ledgerproof/proof-bundle/1",
+      "verdict": "PROVEN",
+      "confidence": "cryptographic",
+      "claim": {
+        "sha256": "ba081366f0bd2a261226ecd033f6574475f99b331d198db5e2853e9f33547ef1",
+        "proven_no_later_than": "2020-01-01T00:00:00Z",
+        "observed_on": "2020-01-01",
+        "observation_attested": false,
+        "attestation_gap_days": 0
+      },
+      "subject": {
+        "native_id": "BOE-A-FORGED",
+        "source": "es-boe",
+        "title": "fabricated — this document was never published"
+      },
+      "anchor": {
+        "txid": "0000000000000000000000000000000000000000000000000000000000000000",
+        "block_height": 1,
+        "block_time": "2020-01-01T00:00:00Z"
+      },
+      "chain_checked": false,
+      "checks": [
+        {
+          "id": "bundle.version",
+          "pass": true
+        },
+        {
+          "id": "hop1.document_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop2a.root_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.tree_size_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.source_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2a.observed_on_commitment",
+          "pass": true
+        },
+        {
+          "id": "hop2b.content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2c.entry_hash",
+          "pass": true
+        },
+        {
+          "id": "hop2d.canonical_embeds_content_hash",
+          "pass": true
+        },
+        {
+          "id": "hop3.anchor_inclusion",
+          "pass": true
+        },
+        {
+          "id": "hop4a.payload_length",
+          "pass": true
+        },
+        {
+          "id": "hop4b.magic",
+          "pass": true
+        },
+        {
+          "id": "hop4c.root_in_payload",
+          "pass": true
+        },
+        {
+          "id": "hop4d.sequence_in_range",
+          "pass": true
+        },
+        {
+          "id": "claim.time_equals_block_time",
+          "pass": true
+        },
+        {
+          "id": "claim.observation_unattested",
+          "pass": true
+        }
+      ]
+    }
+  }
+}
