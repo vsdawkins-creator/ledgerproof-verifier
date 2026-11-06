@@ -3,10 +3,15 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=22.6"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "npm run test:conformance",
+    "test:conformance": "node --experimental-strip-types test/conformance.ts"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.2.4",

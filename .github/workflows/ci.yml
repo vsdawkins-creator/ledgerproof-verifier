@@ -8,14 +8,17 @@ on:
 
 jobs:
   build:
-    name: Verifier — build + type-check
+    name: Verifier — build + type-check + conformance
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "npm"
       - run: npm ci
       - run: npm run build
+      # The offline engine must stay byte-identical to the frozen proof-bundle/1
+      # golden verdicts — this is what "repointed onto the standard, no drift" means.
+      - run: npm run test:conformance

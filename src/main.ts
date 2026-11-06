@@ -1,5 +1,7 @@
 import './style.css'
 import { verifyEntry, type VerificationResult, type Check } from './verify'
+import { verifyBundle, type EvidenceVerdict, type VerdictCheck } from './proofBundle'
+import { confirmAnchorOnChain, type ChainConfirmation } from './proofBundleChain'
 import { t, getLang, setLang, langSwitcherHtml, type Lang } from './i18n'
 
 // ── Finding 11: XSS prevention ───────────────────────────────────────────────
@@ -34,31 +36,45 @@ function safeHref(url: string | undefined): string | null {
 
 // Mutable element handles — reassigned by bind() after every shell re-render
 // (language switching re-renders the shell, so handles must be refreshed).
-let form!: HTMLFormElement
-let input!: HTMLInputElement
+let form: HTMLFormElement | null = null
+let input: HTMLInputElement | null = null
 let resultEl!: HTMLDivElement
+
+// Which input surface is active. 'lookup' = fetch a record by sequence from the
+// API and run the full client-side checks (incl. the Ed25519 signature, i.e.
+// attribution). 'bundle' = verify a self-contained proof bundle fully offline
+// with the standard-conformant engine (existence, no network, no trust in us).
+// URL routes (#/<seq>, /r/<slug>) always force 'lookup'.
+type Mode = 'lookup' | 'bundle'
+// Default the bare-root landing to the offline bundle verifier (the headline
+// "verify without trusting us" surface). Deep links (#/<seq>, /r/<slug>) force
+// 'lookup' in route(), so existing receipt links are unaffected.
+let mode: Mode = 'bundle'
 
 // A closure that re-renders whatever is currently shown, in the active language.
 // Set by every show*/runVerification path; replayed after a language switch so
 // the verdict re-translates without re-fetching from the network.
 let lastRender: (() => void) | null = null
 
-function appShellHtml(): string {
+function modeToggleHtml(): string {
+  const tab = (m: Mode, label: string) => {
+    const active = m === mode
+    return `<button id="mode-${m}" type="button"
+      aria-pressed="${active}"
+      class="flex-1 px-3 py-2 rounded-md text-sm font-medium transition
+             ${active ? 'bg-navy text-cream' : 'text-navy hover:bg-cream'}"
+      ${active ? '' : 'style="background: transparent"'}>${label}</button>`
+  }
   return `
-  <div class="max-w-2xl mx-auto px-6 py-12">
-    <header class="mb-10">
-      <div class="flex items-start justify-between gap-4">
-        <h1 class="text-2xl font-semibold text-navy tracking-tight">
-          ${t('app.h1')}
-        </h1>
-        ${langSwitcherHtml()}
-      </div>
-      <p class="mt-1 text-sm" style="color: var(--color-navy-soft)">
-        ${t('app.intro')}
-      </p>
-    </header>
+    <div class="flex gap-1 mb-4 p-1 rounded-lg" style="background: var(--color-navy-faint)">
+      ${tab('bundle', t('mode.bundle'))}
+      ${tab('lookup', t('mode.lookup'))}
+    </div>`
+}
 
-    <form id="verify-form" class="flex gap-2 mb-8">
+function lookupFormHtml(): string {
+  return `
+    <form id="verify-form" class="flex gap-2">
       <input
         id="seq-input"
         type="number"
@@ -73,7 +89,52 @@ function appShellHtml(): string {
                hover:bg-mint-deep transition whitespace-nowrap">
         ${t('app.verify')}
       </button>
-    </form>
+    </form>`
+}
+
+function bundleFormHtml(): string {
+  return `
+    <div id="bundle-drop">
+      <textarea id="bundle-input" rows="6" spellcheck="false"
+        placeholder="${escapeHtml(t('bundle.placeholder'))}"
+        class="w-full px-4 py-3 border rounded-lg text-xs font-mono bg-cream text-navy
+               focus:outline-none focus:ring-2 focus:ring-mint resize-y"
+        style="border-color: var(--color-navy-faint)"></textarea>
+      <div class="flex flex-wrap items-center gap-3 mt-2">
+        <button id="bundle-verify" type="button"
+          class="px-5 py-2.5 bg-navy text-cream rounded-lg text-sm font-medium
+                 hover:bg-mint-deep transition whitespace-nowrap">
+          ${t('bundle.verify')}
+        </button>
+        <label for="bundle-file" class="text-xs cursor-pointer hover:underline"
+               style="color: var(--color-navy-soft)">${t('bundle.drop')}</label>
+        <input id="bundle-file" type="file" accept="application/json,.json" class="hidden" />
+        <button id="bundle-example" type="button" class="text-xs ml-auto hover:underline"
+                style="color: var(--color-navy-soft)">${t('bundle.example')}</button>
+      </div>
+    </div>`
+}
+
+function appShellHtml(): string {
+  return `
+  <div class="max-w-2xl mx-auto px-6 py-12">
+    <header class="mb-8">
+      <div class="flex items-start justify-between gap-4">
+        <h1 class="text-2xl font-semibold text-navy tracking-tight">
+          ${t('app.h1')}
+        </h1>
+        ${langSwitcherHtml()}
+      </div>
+      <p class="mt-1 text-sm" style="color: var(--color-navy-soft)">
+        ${mode === 'bundle' ? t('bundle.intro') : t('app.intro')}
+      </p>
+    </header>
+
+    ${modeToggleHtml()}
+
+    <div id="input-area" class="mb-8">
+      ${mode === 'bundle' ? bundleFormHtml() : lookupFormHtml()}
+    </div>
 
     <div id="result"></div>
 
@@ -90,13 +151,14 @@ function appShellHtml(): string {
 }
 
 function bind() {
-  form = document.querySelector<HTMLFormElement>('#verify-form')!
-  input = document.querySelector<HTMLInputElement>('#seq-input')!
   resultEl = document.querySelector<HTMLDivElement>('#result')!
+  form = document.querySelector<HTMLFormElement>('#verify-form')
+  input = document.querySelector<HTMLInputElement>('#seq-input')
 
-  form.addEventListener('submit', async (e) => {
+  // ── Lookup mode ──
+  form?.addEventListener('submit', async (e) => {
     e.preventDefault()
-    const seq = parseInt(input.value.trim(), 10)
+    const seq = parseInt((input?.value ?? '').trim(), 10)
     if (isNaN(seq) || seq < 0) {
       showError(t('err.invalidSeq'))
       return
@@ -104,14 +166,65 @@ function bind() {
     await runVerification(seq)
   })
 
+  // ── Bundle mode ──
+  const bundleInput = document.querySelector<HTMLTextAreaElement>('#bundle-input')
+  const dropZone = document.querySelector<HTMLDivElement>('#bundle-drop')
+  document.querySelector<HTMLButtonElement>('#bundle-verify')
+    ?.addEventListener('click', () => runBundleVerification(bundleInput?.value ?? ''))
+  document.querySelector<HTMLInputElement>('#bundle-file')?.addEventListener('change', async (e) => {
+    const f = (e.target as HTMLInputElement).files?.[0]
+    if (!f) return
+    const text = await f.text()
+    if (bundleInput) bundleInput.value = text
+    runBundleVerification(text)
+  })
+  document.querySelector<HTMLButtonElement>('#bundle-example')?.addEventListener('click', async () => {
+    try {
+      const res = await fetch('/bundle-example.json', { cache: 'no-cache' })
+      const text = await res.text()
+      if (bundleInput) bundleInput.value = text
+      runBundleVerification(text)
+    } catch (err) {
+      showError(t('bundle.err.parse', { msg: err instanceof Error ? err.message : String(err) }))
+    }
+  })
+  if (dropZone) {
+    dropZone.addEventListener('dragover', (e) => e.preventDefault())
+    dropZone.addEventListener('drop', async (e) => {
+      e.preventDefault()
+      const f = e.dataTransfer?.files?.[0]
+      if (!f) return
+      const text = await f.text()
+      if (bundleInput) bundleInput.value = text
+      runBundleVerification(text)
+    })
+  }
+
+  // ── Mode toggle ──
+  document.querySelector('#mode-bundle')?.addEventListener('click', () => switchMode('bundle'))
+  document.querySelector('#mode-lookup')?.addEventListener('click', () => switchMode('lookup'))
+
+  // ── Language switch — preserve current input content, replay last render ──
   const sw = document.querySelector<HTMLSelectElement>('#lang-switch')
   sw?.addEventListener('change', () => {
-    const prev = input?.value ?? ''
+    const prevSeq = document.querySelector<HTMLInputElement>('#seq-input')?.value ?? ''
+    const prevBundle = document.querySelector<HTMLTextAreaElement>('#bundle-input')?.value ?? ''
     setLang(sw.value as Lang)
     renderShell()
-    if (prev) input.value = prev
+    const si = document.querySelector<HTMLInputElement>('#seq-input')
+    if (si && prevSeq) si.value = prevSeq
+    const bi = document.querySelector<HTMLTextAreaElement>('#bundle-input')
+    if (bi && prevBundle) bi.value = prevBundle
     if (lastRender) lastRender()
   })
+}
+
+function switchMode(m: Mode) {
+  if (m === mode) return
+  mode = m
+  lastRender = null
+  renderShell()
+  resultEl.innerHTML = ''
 }
 
 function renderShell() {
@@ -238,9 +351,16 @@ async function route() {
   const pathMatch = window.location.pathname.match(/^\/r\/([a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\/?$/i)
   const hashMatch = window.location.hash.match(/^#\/(\d+)$/)
 
+  // A sequence/slug route is always a record lookup — force that mode so the
+  // sequence input exists and the result renders where the user expects it.
+  if ((hashMatch || pathMatch) && mode !== 'lookup') {
+    mode = 'lookup'
+    renderShell()
+  }
+
   if (hashMatch) {
     const seq = parseInt(hashMatch[1], 10)
-    input.value = String(seq)
+    if (input) input.value = String(seq)
     const preV1 = await loadPreV1()
     const entry = preV1[String(seq)]
     if (entry) {
@@ -258,7 +378,7 @@ async function route() {
     // verify it directly so those links resolve. Named slugs still use aliases.
     if (/^\d+$/.test(slug)) {
       const seq = parseInt(slug, 10)
-      input.value = String(seq)
+      if (input) input.value = String(seq)
       const preV1 = await loadPreV1()
       const entry = preV1[String(seq)]
       if (entry) { showPreV1Card(seq, entry) } else { runVerification(seq) }
@@ -276,11 +396,11 @@ async function route() {
     }
     const preV1Entry = preV1[String(seq)]
     if (preV1Entry) {
-      input.value = String(seq)
+      if (input) input.value = String(seq)
       showPreV1Card(seq, preV1Entry)
       return
     }
-    input.value = String(seq)
+    if (input) input.value = String(seq)
     runVerification(seq)
   }
 }
@@ -304,6 +424,184 @@ async function runVerification(seq: number) {
   } catch (err) {
     showError(t('err.verifyFailed', { msg: err instanceof Error ? err.message : String(err) }))
   }
+}
+
+// ── Offline proof-bundle verification ────────────────────────────────────────
+// Parse the pasted/dropped JSON and run the standard-conformant engine. ZERO
+// network — the verdict is computed entirely here. The one optional network call
+// is the user-triggered on-chain confirmation, against a PUBLIC block explorer.
+function runBundleVerification(text: string) {
+  lastRender = null
+  const trimmed = text.trim()
+  if (!trimmed) { showError(t('bundle.err.empty')); return }
+
+  let bundle: unknown
+  try {
+    bundle = JSON.parse(trimmed)
+  } catch (err) {
+    showError(t('bundle.err.parse', { msg: err instanceof Error ? err.message : String(err) }))
+    return
+  }
+
+  const verdict = verifyBundle(bundle)
+
+  // Extract txid + op_return_payload for the optional on-chain confirm; both must
+  // be strings and the bundle must not be MALFORMED for the control to appear.
+  const btc = isRecord(bundle) && isRecord(bundle.bitcoin) ? bundle.bitcoin : undefined
+  // Validate txid shape before it can flow into a block-explorer request path or
+  // an href — a well-formed txid is exactly 64 hex chars. Not currently an XSS/SSRF
+  // vector (escaped in the DOM, host is hardcoded + connect-src-locked), but this
+  // closes the request-path-shaping footgun and drops the on-chain control on junk.
+  const txid = btc && typeof btc.txid === 'string' && /^[0-9a-fA-F]{64}$/.test(btc.txid) ? btc.txid : null
+  const payload = btc && typeof btc.op_return_payload === 'string' && /^[0-9a-fA-F]*$/.test(btc.op_return_payload)
+    ? btc.op_return_payload
+    : null
+  const chainable = verdict.verdict !== 'MALFORMED' && txid != null && payload != null
+
+  showVerdict(verdict, chainable ? txid : null, chainable ? payload : null, null)
+}
+
+function isRecord(x: unknown): x is Record<string, unknown> {
+  return typeof x === 'object' && x !== null && !Array.isArray(x)
+}
+
+function showVerdict(
+  verdict: EvidenceVerdict,
+  txid: string | null,
+  payload: string | null,
+  chain: ChainConfirmation | null,
+) {
+  lastRender = () => {
+    resultEl.innerHTML = renderVerdict(verdict, txid, chain)
+    // Re-wire the on-chain confirm button after each render (until confirmed).
+    if (txid && payload && !chain?.confirmed) {
+      const btn = document.querySelector<HTMLButtonElement>('#chain-confirm')
+      btn?.addEventListener('click', async () => {
+        btn.disabled = true
+        btn.textContent = t('chain.checking')
+        const c = await confirmAnchorOnChain(txid, payload)
+        showVerdict(verdict, txid, payload, c)
+      })
+    }
+  }
+  lastRender()
+}
+
+function verdictBadge(v: EvidenceVerdict['verdict']): string {
+  const cfg = v === 'PROVEN'
+    ? { cls: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400', label: t('verdict.proven.badge') }
+    : v === 'NOT_PROVEN'
+    ? { cls: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400', label: t('verdict.notproven.badge') }
+    : { cls: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400', label: t('verdict.malformed.badge') }
+  return `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${cfg.cls}">${cfg.label}</span>`
+}
+
+function evRow(label: string, value: string, mono = false): string {
+  return `<div class="flex justify-between gap-4 py-1">
+    <span class="text-gray-500 flex-shrink-0">${escapeHtml(label)}</span>
+    <span class="${mono ? 'font-mono break-all' : ''} text-gray-800 dark:text-gray-200 text-right">${escapeHtml(value)}</span>
+  </div>`
+}
+
+function renderVerdictCheck(c: VerdictCheck): string {
+  const icon = c.pass ? `<span class="text-green-500">✓</span>` : `<span class="text-red-500">✗</span>`
+  return `<div class="flex items-start gap-3 px-4 py-2.5 text-sm">
+    <span class="mt-0.5 text-base leading-none flex-shrink-0">${icon}</span>
+    <div class="flex-1 min-w-0">
+      <span class="font-mono text-xs text-gray-900 dark:text-white break-all">${escapeHtml(c.label)}</span>
+      ${!c.pass && c.detail ? `<p class="text-xs text-red-500 mt-0.5 break-all">${escapeHtml(c.detail)}</p>` : ''}
+    </div>
+  </div>`
+}
+
+function renderVerdict(v: EvidenceVerdict, txid: string | null, chain: ChainConfirmation | null): string {
+  const meaning = v.verdict === 'PROVEN'
+    ? t('verdict.proven.meaning', { date: escapeHtml(v.claim?.proven_no_later_than ?? '') })
+    : v.verdict === 'NOT_PROVEN'
+    ? t('verdict.notproven.meaning')
+    : t('verdict.malformed.meaning', { err: escapeHtml(v.error ?? '') })
+
+  let detailCards = ''
+  if (v.verdict !== 'MALFORMED' && v.claim) {
+    const gap = v.claim.attestation_gap_days
+    const claimCard = `
+      <div class="text-xs">
+        <p class="font-medium text-gray-700 dark:text-gray-300 mb-1">${t('ev.claim')}</p>
+        <div class="pl-1">
+          ${evRow(t('ev.sha256'), v.claim.sha256, true)}
+          ${evRow(t('ev.provenBy'), v.claim.proven_no_later_than)}
+          ${evRow(t('ev.observedOn'), v.claim.observed_on)}
+          ${gap != null ? evRow(t('ev.gap'), t('ev.gapDays', { n: gap })) : ''}
+        </div>
+      </div>`
+    const s = v.subject
+    const subjectCard = s && (s.source || s.native_id || s.title) ? `
+      <div class="text-xs">
+        <p class="font-medium text-gray-700 dark:text-gray-300 mb-1">${t('ev.subject')}</p>
+        <div class="pl-1">
+          ${s.title ? evRow(t('ev.title'), s.title) : ''}
+          ${s.source ? evRow(t('ev.source'), s.source) : ''}
+          ${s.native_id ? evRow(t('ev.nativeId'), s.native_id, true) : ''}
+        </div>
+      </div>` : ''
+    const a = v.anchor
+    const anchorCard = a && a.txid ? `
+      <div class="text-xs">
+        <p class="font-medium text-gray-700 dark:text-gray-300 mb-1">${t('ev.anchor')}</p>
+        <div class="pl-1">
+          <div class="flex justify-between gap-4 py-1">
+            <span class="text-gray-500 flex-shrink-0">${t('ev.txid')}</span>
+            <a href="https://mempool.space/tx/${escapeHtml(a.txid)}" target="_blank" rel="noopener"
+               class="font-mono break-all text-right text-mint-deep hover:underline">${escapeHtml(a.txid)}</a>
+          </div>
+          ${a.block_height != null ? evRow(t('ev.blockHeight'), String(a.block_height)) : ''}
+          ${a.block_time ? evRow(t('ev.blockTime'), a.block_time) : ''}
+        </div>
+      </div>` : ''
+    detailCards = `<div class="space-y-3 p-3 rounded-lg" style="background: var(--color-navy-faint)">${claimCard}${subjectCard}${anchorCard}</div>`
+  }
+
+  let chainSection = ''
+  if (txid && v.verdict !== 'MALFORMED') {
+    const confirmBtn = `<button id="chain-confirm" type="button"
+        class="mt-1 px-4 py-2 text-xs rounded-lg border hover:bg-cream transition"
+        style="border-color: var(--color-navy-faint); color: var(--color-navy)">${t('chain.confirm')}</button>`
+    if (!chain) {
+      chainSection = `<div>${confirmBtn}<p class="mt-1 text-xs" style="color: var(--color-navy-soft)">${t('chain.note')}</p></div>`
+    } else if (chain.confirmed) {
+      chainSection = `<div class="text-xs p-3 rounded-lg bg-green-50 dark:bg-green-900/10 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400">
+        ${t('chain.confirmed', { n: chain.confirmations ?? '—' })}
+        <p class="mt-1 text-gray-500">${t('chain.note')}</p>
+      </div>`
+    } else if (chain.error) {
+      chainSection = `<div class="text-xs p-3 rounded-lg bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-400 mb-2">
+        ${t('chain.error', { msg: escapeHtml(chain.error) })}</div>${confirmBtn}`
+    } else {
+      chainSection = `<div class="text-xs p-3 rounded-lg bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400">
+        ${t('chain.mismatch')}<p class="mt-1 text-gray-500">${t('chain.note')}</p></div>`
+    }
+  }
+
+  const passCount = v.checks.filter((c) => c.pass).length
+  return `
+    <div class="space-y-4">
+      <div class="flex items-start justify-between gap-4">
+        <p class="text-sm text-gray-700 dark:text-gray-300 flex-1">${meaning}</p>
+        ${verdictBadge(v.verdict)}
+      </div>
+      ${v.verdict === 'PROVEN'
+        ? `<p class="text-xs" style="color: var(--color-navy-soft)">${t('verdict.existence_note')} ${t('verdict.offline_note')}</p>`
+        : ''}
+      ${detailCards}
+      ${chainSection}
+      <div>
+        <p class="text-xs font-medium text-gray-500 mb-1">${t('ev.checks')} (${passCount}/${v.checks.length})</p>
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg divide-y divide-gray-100 dark:divide-gray-800">
+          ${v.checks.map(renderVerdictCheck).join('')}
+        </div>
+      </div>
+    </div>
+  `
 }
 
 function showError(msg: string) {

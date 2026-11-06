@@ -1,0 +1,103 @@
+{
+  "v": "ledgerproof/proof-bundle/1",
+  "claim": {
+    "statement": "The document identified by document.sha256 existed no later than claim.proven_no_later_than. That instant is attested by the Bitcoin block containing bitcoin.txid, not by LedgerProof.",
+    "proven_no_later_than": "2026-07-02T03:30:09Z",
+    "observed_on": "2026-03-03",
+    "observation_attested": false,
+    "observation_note": "observed_on is LedgerProof's record of when it saw the document. It is NOT attested by the chain. Only proven_no_later_than is."
+  },
+  "document": {
+    "sha256": "08586ccd3ca173f5c0b9a5acdcc4f1a8b2a6edb2d3e2136e26e1b6508f5b97d9",
+    "native_id": "BOE-A-2026-4974",
+    "source": "es-boe",
+    "source_url": "https://www.boe.es/diario_boe/xml.php?id=BOE-A-2026-4974",
+    "bytes": 5628,
+    "title": "Sentencia de 18 de febrero de 2026, de la Sala Tercera del Tribunal Supremo, que estima en parte el recurso contencioso-administrativo interpuesto por la representaci\u00f3n procesal del sindicato Confederaci\u00f3n General del Trabajo (CGT) contra el Real Decreto 402/2025, de 27 de mayo, por el que se regula el procedimiento previo para determinar los supuestos en los que procede permitir anticipar la edad de jubilaci\u00f3n en el sistema de la Seguridad Social mediante la aplicaci\u00f3n de coeficientes reductores, anulando (i) el art\u00edculo 10.2.a); y ,(ii) art\u00edculo 12.1 del Real Decreto, con el alcance de entender suprimida la exigencia la identificaci\u00f3n fiscal en la solicitud de inicio del procedimiento previo."
+  },
+  "document_tree": {
+    "algo": "rfc9162-sha256",
+    "leaf_index": 3,
+    "tree_size": 247,
+    "proof": [
+      "54b1e23927c1b2963d5032b2a0ad2b920a1a295125153738cefb26b0fecf12cf",
+      "61a7acb3b1476b09eb687edf2336512b7fbdab991e15cfd4c69108b77bdc94df",
+      "dfc04cced87795a3bb0d2d0a9eaddebfb05828e6950224f92be1bdb982a16d7b",
+      "4b081bf508d217557599a28c94eed98a9d1f84f075b527d58dc1d1b9301fd733",
+      "2b50ff072214603fef0ee2963c4012e2f4cb7cca0c90f0e9df043d5f3b1483c2",
+      "f10dd737950d10b6542ae48f1ed415f7a4623828641a43bb970351505d492378",
+      "0cffd0ccacf249b049966814d7a2506fb7041ab008ed9ea35a3f726664a6fa36",
+      "0f124e092d7be7792cb4f3c58498f227c41873ef951b8c8338503b119e003f22"
+    ],
+    "root": "8ef2eca17aa033e0000c9204132236d771b2aa5c7dc12148e09e1518ed43cd7e"
+  },
+  "log_entry": {
+    "sequence": 96,
+    "publisher_id": "a50-scanner-trial",
+    "key_id": "key_0df38c6d28834438",
+    "entry_timestamp": "2026-07-01T14:14:24Z",
+    "content": {
+      "algo": "rfc9162-sha256",
+      "batch_date": "2026-03-03",
+      "merkle_root": "8ef2eca17aa033e0000c9204132236d771b2aa5c7dc12148e09e1518ed43cd7e",
+      "source": "es-boe",
+      "tree_size": 247,
+      "type": "ledgerproof/public-record-batch"
+    },
+    "content_hash": "454ce3cd3a16d0d23c7c63279421f3b8b13d0e8b74e30e1f243e58761fac1995",
+    "entry_json_canonical": "{\"content\":{\"algo\":\"rfc9162-sha256\",\"batch_date\":\"2026-03-03\",\"merkle_root\":\"8ef2eca17aa033e0000c9204132236d771b2aa5c7dc12148e09e1518ed43cd7e\",\"source\":\"es-boe\",\"tree_size\":247,\"type\":\"ledgerproof/public-record-batch\"},\"content_hash\":\"454ce3cd3a16d0d23c7c63279421f3b8b13d0e8b74e30e1f243e58761fac1995\",\"content_type\":\"application/vnd.ledgerproof.public-record+json\",\"key_id\":\"key_0df38c6d28834438\",\"prev_hash\":\"f0a1595af0bfd28d744d22f6f4761927b4401ada7a99d7b87cab746f2cf06c26\",\"protocol_version\":\"ledgerproof/1.0\",\"publisher_id\":\"a50-scanner-trial\",\"sequence\":96,\"timestamp\":\"2026-07-01T14:14:24Z\"}",
+    "entry_hash": "8e047ddf11e236671f01b7e4a6d089f697163e8a2317ab7fc9b71248fd3019d1",
+    "signature": "24025d7497213637c242fc2115aa969a6db5cf782dc1fb49c9ae50fd8c5cd2c26bf7eaad34a9d6a234dc507923e3a4f2d56ca0cb9461221d7184384387e59e00",
+    "prev_hash": "f0a1595af0bfd28d744d22f6f4761927b4401ada7a99d7b87cab746f2cf06c26"
+  },
+  "anchor_tree": {
+    "algo": "btc-sha256-pair-duplast",
+    "note": "leaves are RAW 32-byte hashes; node = sha256(L||R); odd level duplicates its last node",
+    "proof": [
+      {
+        "hash": "f0a1595af0bfd28d744d22f6f4761927b4401ada7a99d7b87cab746f2cf06c26",
+        "is_left": true
+      },
+      {
+        "hash": "7561206622b9eb7d3193bff87de9feb706769aa34d3656e644e838e877171d8b",
+        "is_left": false
+      },
+      {
+        "hash": "d7ac45a62b5c901949a26ad12f7f3207c5655027153a4993912653599ee62da8",
+        "is_left": true
+      },
+      {
+        "hash": "e9467ce854c5a2339d983605c7377336dd9eda66c784967009d196300b6bdc8f",
+        "is_left": true
+      },
+      {
+        "hash": "9727823eefe2b85fbb69d07b6913c969e10599b4716afcecd000f84797c87717",
+        "is_left": false
+      },
+      {
+        "hash": "e8574f4832ce1e16a5b87ceae4da1160a900639556afe2c09bd655cdf193df68",
+        "is_left": false
+      },
+      {
+        "hash": "8bb065fbf02efba49347212d7808b0a5a6d8f8cb4be0fae98c3293f7158e1472",
+        "is_left": true
+      },
+      {
+        "hash": "8fcaab42dbcba6a025ac8c16b65ba72345a2ba616dbcf3149bf70c412057d6f6",
+        "is_left": false
+      },
+      {
+        "hash": "197efe38bb4d1b523e64582423e6604342d5c4e56a473d6c30481ca27462f842",
+        "is_left": false
+      }
+    ],
+    "root": "c61210fa70d2715a1ff13b1f3ff2dfa1e4c7f6db1cfe71df4c4499561133b60e"
+  },
+  "bitcoin": {
+    "txid": "1096d33bed26cb2feff7f65b4a1f2bf6638e03c9f79c337a2c5bf68757f682fe",
+    "block_height": 956302,
+    "block_time": "2026-07-02T03:30:09Z",
+    "op_return_payload": "4c5052310000001300000210c61210fa70d2715a1ff13b1f3ff2dfa1e4c7f6db1cfe71df4c4499561133b60e",
+    "op_return_format": "LPR1: magic[4] || seq_start[4 BE] || seq_end[4 BE] || root[32]"
+  }
+}
