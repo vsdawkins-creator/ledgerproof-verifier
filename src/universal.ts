@@ -29,7 +29,7 @@ interface UniversalBundle {
   subject_sha256: string
   evidence_cbor_b64: string
   registry: unknown
-  practice?: boolean
+  checkpoint_source?: { block_hash: string; agreed_by: string[]; note: string }
 }
 
 interface WitnessResult {
@@ -82,7 +82,9 @@ export function renderUniversal(r: Report, b: UniversalBundle): string {
     })
     .join('')
   const notes = [
-    b.practice ? `<p class="text-xs mt-2">⚠️ ${esc(t('universal.practice'))}</p>` : '',
+    b.checkpoint_source
+      ? `<p class="text-xs mt-2" style="color: var(--color-navy-soft)">${esc(t('universal.checkpoint', { block: b.checkpoint_source.block_hash, sources: b.checkpoint_source.agreed_by.join(', ') }))}</p>`
+      : '',
     `<p class="text-xs mt-2" style="color: var(--color-navy-soft)">${esc(t('universal.selfRegistry'))}</p>`,
   ].join('')
   return `<div class="p-4 rounded-lg" style="background: var(--color-navy-faint)">

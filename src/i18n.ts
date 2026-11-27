@@ -13,12 +13,13 @@ export const LANGS: Lang[] = ['en', 'de', 'fr']
 type Dict = Record<string, string>
 
 const EN: Dict = {
+  "universal.checkpoint": "Bitcoin checkpoint: block {block}, as reported identically by {sources} when this bundle was built. Compare it with a Bitcoin node you trust.",
   "mode.universal": "Any witness",
   "universal.intro": "Check a sticker from any witness — Bitcoin, official timestamp services, signed logs — with the open brick box running entirely in your browser.",
   "universal.placeholder": "Paste an lp-evidence/v1 bundle (JSON)…",
   "universal.verify": "Check in my browser",
   "universal.drop": "or choose a file",
-  "universal.example": "Try the NASA example",
+  "universal.example": "Load a real Record proof (Bitcoin mainnet)",
   "universal.ok": "Verified",
   "universal.fail": "Not verified",
   "universal.witness.verified": "proof verified",
@@ -27,7 +28,6 @@ const EN: Dict = {
   "universal.untrusted": "not on your trust list",
   "universal.signedAt": "Witness signed this time: {time}",
   "universal.beforeBlock": "Existed before Bitcoin block {block} (header time ≈ {time})",
-  "universal.practice": "Demo: the Bitcoin step uses a practice chain, not mainnet.",
   "universal.selfRegistry": "Witness cards in this check came from the bundle itself. For full independence, compare them with a registry you trust.",
   "universal.err": "Could not check: {msg}",
   // Page chrome
@@ -151,12 +151,13 @@ const EN: Dict = {
 }
 
 const DE: Dict = {
+  "universal.checkpoint": "Bitcoin-Checkpoint: Block {block}, beim Erstellen des Pakets übereinstimmend gemeldet von {sources}. Mit einem vertrauenswürdigen Bitcoin-Knoten vergleichen.",
   "mode.universal": "Jeder Zeuge",
   "universal.intro": "Prüfen Sie einen Nachweis von jedem Zeugen — Bitcoin, amtliche Zeitstempeldienste, signierte Logs — mit der offenen Prüf-Engine, vollständig in Ihrem Browser.",
   "universal.placeholder": "lp-evidence/v1-Paket (JSON) einfügen…",
   "universal.verify": "Im Browser prüfen",
   "universal.drop": "oder Datei wählen",
-  "universal.example": "NASA-Beispiel testen",
+  "universal.example": "Echten Record-Nachweis laden (Bitcoin-Hauptnetz)",
   "universal.ok": "Verifiziert",
   "universal.fail": "Nicht verifiziert",
   "universal.witness.verified": "Nachweis verifiziert",
@@ -165,7 +166,6 @@ const DE: Dict = {
   "universal.untrusted": "nicht auf Ihrer Vertrauensliste",
   "universal.signedAt": "Zeuge hat diese Zeit signiert: {time}",
   "universal.beforeBlock": "Existierte vor Bitcoin-Block {block} (Header-Zeit ≈ {time})",
-  "universal.practice": "Demo: Der Bitcoin-Schritt nutzt eine Übungskette, nicht das Hauptnetz.",
   "universal.selfRegistry": "Die Zeugenkarten dieser Prüfung stammen aus dem Paket selbst. Für volle Unabhängigkeit mit einem vertrauenswürdigen Register vergleichen.",
   "universal.err": "Prüfung nicht möglich: {msg}",
   'app.h1': 'LedgerProof Verifizierer',
@@ -284,12 +284,13 @@ const DE: Dict = {
 }
 
 const FR: Dict = {
+  "universal.checkpoint": "Point de contrôle Bitcoin : bloc {block}, signalé à l’identique par {sources} lors de la création du dossier. Comparez-le avec un nœud Bitcoin de confiance.",
   "mode.universal": "Tout témoin",
   "universal.intro": "Vérifiez une preuve de n'importe quel témoin — Bitcoin, services d'horodatage officiels, journaux signés — avec le moteur ouvert, entièrement dans votre navigateur.",
   "universal.placeholder": "Collez un dossier lp-evidence/v1 (JSON)…",
   "universal.verify": "Vérifier dans mon navigateur",
   "universal.drop": "ou choisir un fichier",
-  "universal.example": "Essayer l'exemple NASA",
+  "universal.example": "Charger une vraie preuve du Record (Bitcoin réseau principal)",
   "universal.ok": "Vérifié",
   "universal.fail": "Non vérifié",
   "universal.witness.verified": "preuve vérifiée",
@@ -298,7 +299,6 @@ const FR: Dict = {
   "universal.untrusted": "hors de votre liste de confiance",
   "universal.signedAt": "Le témoin a signé cette heure : {time}",
   "universal.beforeBlock": "Existait avant le bloc Bitcoin {block} (heure d’en-tête ≈ {time})",
-  "universal.practice": "Démo : l'étape Bitcoin utilise une chaîne d'essai, pas le réseau principal.",
   "universal.selfRegistry": "Les cartes de témoins proviennent du dossier lui-même. Pour une indépendance totale, comparez-les à un registre de confiance.",
   "universal.err": "Vérification impossible : {msg}",
   'app.h1': 'Vérificateur LedgerProof',
