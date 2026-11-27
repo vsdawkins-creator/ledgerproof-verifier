@@ -1,0 +1,124 @@
+{
+  "checkpoint_source": {
+    "agreed_by": [
+      "https://mempool.space/api",
+      "https://blockstream.info/api"
+    ],
+    "block_hash": "0000000000000000000081e79cee21920746c4619545f655c49e78c5a9010b7b",
+    "note": "Block hash reported identically by both explorers when this bundle was built. Compare it with a Bitcoin node you trust."
+  },
+  "evidence_cbor_b64": "oWZwcm9vZnOBo2p3aXRuZXNzX2lkb2JpdGNvaW4tbWFpbm5ldGZyZWNpcGWYIBjoAhh3EBhfGH0YlxgrGCsYqxhpGCAY+xi4GIoYqBi3GNMYLximGPgY/hjDFhjKGH0Y4BhaGF8YrhjQGJBoZWxlbWVudHOFoWhUcmVlUGF0aKNlaW5kZXgCZHNpemUDZHBhdGiBmCAYuBiYGDQYVxiwGF0YhBhKGKgYqhj/GKYYshgbGHEYxwQYrBi6GDcYTBiZGH4Y+Bh3GOkYnBg8GDUY2xj/GBihZUVtYmVkoWVieXRlc5jRGHsYIhhhGGwYZxhvGCIYOhgiGHIYZhhjGDkYMRg2GDIYLRhzGGgYYRgyGDUYNhgiGCwYIhhiGGEYdBhjGGgYXxhkGGEYdBhlGCIYOhgiGDIYMBgyGDYYLRgwGDYYLRgxGDIYIhgsGCIYbRhlGHIYaxhsGGUYXxhyGG8Ybxh0GCIYOhgiGDIYORhkGDkYNRhlGDYYNxhlGDgYNBgzGGEYYRg1GDcYMhhjGDIYZhg4GGEYNRhkGGIYMRhlGGYYMhhkGDgYNBg4GDYYYRgxGGMYMBg0GDIYZBg2GDQYMRgyGDYYZhgwGDYYMBg0GDMYNhgwGGIYZhgxGGMYNhg3GDcYZBhjGDUYIhgsGCIYcxhvGHUYchhjGGUYIhg6GCIYbhhhGHMYYRgtGGQYbxhuGGsYaRgiGCwYIhh0GHIYZRhlGF8YcxhpGHoYZRgiGDoYMxgsGCIYdBh5GHAYZRgiGDoYIhhsGGUYZBhnGGUYchhwGHIYbxhvGGYYLxhwGHUYYhhsGGkYYxgtGHIYZRhjGG8YchhkGC0YYhhhGHQYYxhoGCIYfaFlRW1iZWShZWJ5dGVzmQJZGHsYIhhjGG8Ybhh0GGUYbhh0GCIYOhh7GCIYYRhsGGcYbxgiGDoYIhhyGGYYYxg5GDEYNhgyGC0YcxhoGGEYMhg1GDYYIhgsGCIYYhhhGHQYYxhoGF8YZBhhGHQYZRgiGDoYIhgyGDAYMhg2GC0YMBg2GC0YMRgyGCIYLBgiGG0YZRhyGGsYbBhlGF8YchhvGG8YdBgiGDoYIhgyGDkYZBg5GDUYZRg2GDcYZRg4GDQYMxhhGGEYNRg3GDIYYxgyGGYYOBhhGDUYZBhiGDEYZRhmGDIYZBg4GDQYOBg2GGEYMRhjGDAYNBgyGGQYNhg0GDEYMhg2GGYYMBg2GDAYNBgzGDYYMBhiGGYYMRhjGDYYNxg3GGQYYxg1GCIYLBgiGHMYbxh1GHIYYxhlGCIYOhgiGG4YYRhzGGEYLRhkGG8YbhhrGGkYIhgsGCIYdBhyGGUYZRhfGHMYaRh6GGUYIhg6GDMYLBgiGHQYeRhwGGUYIhg6GCIYbBhlGGQYZxhlGHIYcBhyGG8YbxhmGC8YcBh1GGIYbBhpGGMYLRhyGGUYYxhvGHIYZBgtGGIYYRh0GGMYaBgiGH0YLBgiGGMYbxhuGHQYZRhuGHQYXxhoGGEYcxhoGCIYOhgiGGYYZBhlGGQYMhhmGGIYNBhhGDIYNRg0GDEYMRgyGDMYMRgyGGEYYxhhGGQYMBg3GDQYORhjGGYYMxg5GDcYMRhjGDQYYRhjGGYYZBg4GDYYYhhkGDMYOBg1GGUYMBg3GDUYYRhiGDIYNhhkGDIYZBhlGDAYZRg2GDMYOBg1GDUYIhgsGCIYYxhvGG4YdBhlGG4YdBhfGHQYeRhwGGUYIhg6GCIYYRhwGHAYbBhpGGMYYRh0GGkYbxhuGC8YdhhuGGQYLhhsGGUYZBhnGGUYchhwGHIYbxhvGGYYLhhwGHUYYhhsGGkYYxgtGHIYZRhjGG8YchhkGCsYahhzGG8YbhgiGCwYIhhrGGUYeRhfGGkYZBgiGDoYIhhrGGUYeRhfGDAYZBhmGDMYOBhjGDYYZBgyGDgYOBgzGDQYNBgzGDgYIhgsGCIYcBhyGGUYdhhfGGgYYRhzGGgYIhg6GCIYNhgyGGUYMxg1GDIYZRhlGDkYNhg4GDYYMBhjGDIYNxhmGGIYNBhiGDUYNxgzGGEYNBgyGDEYMhgzGGIYMxhkGDYYYxhjGGEYORg5GDcYZhhkGDEYMBhmGGUYYRg2GGYYNxg4GGEYORgxGGUYYRg4GGQYYhgxGGEYNxhkGDUYORgiGCwYIhhwGHIYbxh0GG8YYxhvGGwYXxh2GGUYchhzGGkYbxhuGCIYOhgiGGwYZRhkGGcYZRhyGHAYchhvGG8YZhgvGDEYLhgwGCIYLBgiGHAYdRhiGGwYaRhzGGgYZRhyGF8YaRhkGCIYOhgiGGEYNRgwGC0YcxhjGGEYbhhuGGUYchgtGHQYchhpGGEYbBgiGCwYIhhzGGUYcRh1GGUYbhhjGGUYIhg6GDYYMBg2GDIYLBgiGHQY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",
+  "format": "lp-evidence/v1",
+  "label": "Public Record: NASA DONKI notification 20260612-AL-003 (batch nasa-donki:2026-06-12, witness entry 6062), anchored in Bitcoin mainnet tx 18ae07eb…a7de, block 957,720",
+  "registry": {
+    "recipes": [
+      {
+        "bricks": [
+          {
+            "Fingerprint": {
+              "alg": "Sha256"
+            }
+          },
+          "TreePath",
+          {
+            "EmbedHex": {
+              "key": "merkle_root"
+            }
+          },
+          {
+            "EmbedHex": {
+              "key": "content_hash"
+            }
+          },
+          "PairPath",
+          "BitcoinChain"
+        ],
+        "id": "ledgerproof-public-record",
+        "version": 1
+      }
+    ],
+    "witnesses": [
+      {
+        "anchor": {
+          "BitcoinCheckpoint": {
+            "max_target_bits": 486604799,
+            "trusted_blocks": [
+              [
+                123,
+                11,
+                1,
+                169,
+                197,
+                120,
+                158,
+                196,
+                85,
+                246,
+                69,
+                149,
+                97,
+                196,
+                70,
+                7,
+                146,
+                33,
+                238,
+                156,
+                231,
+                129,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            ]
+          }
+        },
+        "jurisdiction": null,
+        "promise": "BeforeBlock",
+        "recipe": [
+          232,
+          2,
+          119,
+          16,
+          95,
+          125,
+          151,
+          43,
+          43,
+          171,
+          105,
+          32,
+          251,
+          184,
+          138,
+          168,
+          183,
+          211,
+          47,
+          166,
+          248,
+          254,
+          195,
+          22,
+          202,
+          125,
+          224,
+          90,
+          95,
+          174,
+          208,
+          144
+        ],
+        "witness_id": "bitcoin-mainnet"
+      }
+    ]
+  },
+  "subject_sha256": "48248f9143db557ae271fa440883bcc543e5d08cb0ebf046dcc59c2c6ae00e12"
+}

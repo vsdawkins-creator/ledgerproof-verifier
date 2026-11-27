@@ -1,3 +1,5 @@
+import { renderTransaction, verifyTransactionFiles } from './transaction'
+import { renderUniversal, verifyUniversal } from './universal'
 import './style.css'
 import { verifyEntry, type VerificationResult, type Check } from './verify'
 import { ApiUnavailableError } from './api'
@@ -46,7 +48,7 @@ let resultEl!: HTMLDivElement
 // attribution). 'bundle' = verify a self-contained proof bundle fully offline
 // with the standard-conformant engine (existence, no network, no trust in us).
 // URL routes (#/<seq>, /r/<slug>) always force 'lookup'.
-type Mode = 'lookup' | 'bundle'
+type Mode = 'lookup' | 'bundle' | 'universal' | 'transaction'
 // Default the bare-root landing to the offline bundle verifier (the headline
 // "verify without trusting us" surface). Deep links (#/<seq>, /r/<slug>) force
 // 'lookup' in route(), so existing receipt links are unaffected.
@@ -70,6 +72,8 @@ function modeToggleHtml(): string {
     <div class="flex gap-1 mb-4 p-1 rounded-lg" style="background: var(--color-navy-faint)">
       ${tab('bundle', t('mode.bundle'))}
       ${tab('lookup', t('mode.lookup'))}
+      ${tab('universal', t('mode.universal'))}
+      ${tab('transaction', t('mode.transaction'))}
     </div>`
 }
 
@@ -116,6 +120,43 @@ function bundleFormHtml(): string {
     </div>`
 }
 
+function universalFormHtml(): string {
+  return `
+    <div id="universal-drop">
+      <textarea id="universal-input" rows="6" spellcheck="false"
+        placeholder="${escapeHtml(t('universal.placeholder'))}"
+        class="w-full px-4 py-3 border rounded-lg text-xs font-mono bg-cream text-navy
+               focus:outline-none focus:ring-2 focus:ring-mint resize-y"
+        style="border-color: var(--color-navy-faint)"></textarea>
+      <div class="flex flex-wrap items-center gap-3 mt-2">
+        <button id="universal-verify" type="button"
+          class="px-5 py-2.5 bg-navy text-cream rounded-lg text-sm font-medium
+                 hover:bg-mint-deep transition whitespace-nowrap">
+          ${t('universal.verify')}
+        </button>
+        <label for="universal-file" class="text-xs cursor-pointer hover:underline"
+               style="color: var(--color-navy-soft)">${t('universal.drop')}</label>
+        <input id="universal-file" type="file" accept="application/json,.json" class="hidden" />
+        <button id="universal-example" type="button" class="text-xs ml-auto hover:underline"
+                style="color: var(--color-navy-soft)">${t('universal.example')}</button>
+      </div>
+    </div>`
+}
+
+function transactionFormHtml(): string {
+  return `
+    <div class="space-y-2">
+      <label class="block text-xs text-navy">${t('tx.packageLabel')}
+        <input id="tx-package" type="file" accept=".cbor,application/cbor" class="block mt-1 text-xs" /></label>
+      <label class="block text-xs text-navy">${t('tx.policyLabel')}
+        <input id="tx-policy" type="file" accept=".json,application/json" class="block mt-1 text-xs" /></label>
+      <button id="tx-verify" type="button"
+        class="px-5 py-2.5 bg-navy text-cream rounded-lg text-sm font-medium hover:bg-mint-deep transition whitespace-nowrap">
+        ${t('tx.verify')}</button>
+      <p class="text-xs" style="color: var(--color-navy-soft)">${t('tx.noExample')}</p>
+    </div>`
+}
+
 function appShellHtml(): string {
   return `
   <div class="max-w-2xl mx-auto px-6 py-12">
@@ -127,14 +168,14 @@ function appShellHtml(): string {
         ${langSwitcherHtml()}
       </div>
       <p class="mt-1 text-sm" style="color: var(--color-navy-soft)">
-        ${mode === 'bundle' ? t('bundle.intro') : t('app.intro')}
+        ${mode === 'bundle' ? t('bundle.intro') : mode === 'universal' ? t('universal.intro') : mode === 'transaction' ? t('tx.intro') : t('app.intro')}
       </p>
     </header>
 
     ${modeToggleHtml()}
 
     <div id="input-area" class="mb-8">
-      ${mode === 'bundle' ? bundleFormHtml() : lookupFormHtml()}
+      ${mode === 'bundle' ? bundleFormHtml() : mode === 'universal' ? universalFormHtml() : mode === 'transaction' ? transactionFormHtml() : lookupFormHtml()}
     </div>
 
     <div id="result"></div>
@@ -201,9 +242,59 @@ function bind() {
     })
   }
 
+  // ── Universal ("any witness") mode ──
+  const uInput = document.querySelector<HTMLTextAreaElement>('#universal-input')
+  const runUniversal = async (text: string) => {
+    try {
+      const { report, bundle } = await verifyUniversal(text)
+      lastRender = () => { resultEl.innerHTML = renderUniversal(report, bundle) }
+      lastRender()
+    } catch (err) {
+      showError(t('universal.err', { msg: err instanceof Error ? err.message : String(err) }))
+    }
+  }
+  document.querySelector<HTMLButtonElement>('#universal-verify')
+    ?.addEventListener('click', () => runUniversal(uInput?.value ?? ''))
+  document.querySelector<HTMLInputElement>('#universal-file')?.addEventListener('change', async (e) => {
+    const f = (e.target as HTMLInputElement).files?.[0]
+    if (!f) return
+    const text = await f.text()
+    if (uInput) uInput.value = text
+    runUniversal(text)
+  })
+  document.querySelector<HTMLButtonElement>('#universal-example')?.addEventListener('click', async () => {
+    try {
+      const res = await fetch('/universal-example.json', { cache: 'no-cache' })
+      const text = await res.text()
+      if (uInput) uInput.value = text
+      runUniversal(text)
+    } catch (err) {
+      showError(t('universal.err', { msg: err instanceof Error ? err.message : String(err) }))
+    }
+  })
+
   // ── Mode toggle ──
   document.querySelector('#mode-bundle')?.addEventListener('click', () => switchMode('bundle'))
   document.querySelector('#mode-lookup')?.addEventListener('click', () => switchMode('lookup'))
+  document.querySelector('#mode-universal')?.addEventListener('click', () => switchMode('universal'))
+  document.querySelector('#mode-transaction')?.addEventListener('click', () => switchMode('transaction'))
+
+  // ── Transaction evidence mode ──
+  document.querySelector<HTMLButtonElement>('#tx-verify')?.addEventListener('click', async () => {
+    const pf = document.querySelector<HTMLInputElement>('#tx-package')?.files?.[0]
+    const qf = document.querySelector<HTMLInputElement>('#tx-policy')?.files?.[0]
+    if (!pf || !qf) {
+      showError(t('tx.needFiles'))
+      return
+    }
+    try {
+      const report = await verifyTransactionFiles(new Uint8Array(await pf.arrayBuffer()), await qf.text())
+      lastRender = () => { resultEl.innerHTML = renderTransaction(report) }
+      lastRender()
+    } catch (err) {
+      showError(t('universal.err', { msg: err instanceof Error ? err.message : String(err) }))
+    }
+  })
 
   // ── Language switch — preserve current input content, replay last render ──
   const sw = document.querySelector<HTMLSelectElement>('#lang-switch')
