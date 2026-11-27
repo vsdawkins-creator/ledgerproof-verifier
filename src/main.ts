@@ -1,3 +1,4 @@
+import { renderTransaction, verifyTransactionFiles } from './transaction'
 import { renderUniversal, verifyUniversal } from './universal'
 import './style.css'
 import { verifyEntry, type VerificationResult, type Check } from './verify'
@@ -47,7 +48,7 @@ let resultEl!: HTMLDivElement
 // attribution). 'bundle' = verify a self-contained proof bundle fully offline
 // with the standard-conformant engine (existence, no network, no trust in us).
 // URL routes (#/<seq>, /r/<slug>) always force 'lookup'.
-type Mode = 'lookup' | 'bundle' | 'universal'
+type Mode = 'lookup' | 'bundle' | 'universal' | 'transaction'
 // Default the bare-root landing to the offline bundle verifier (the headline
 // "verify without trusting us" surface). Deep links (#/<seq>, /r/<slug>) force
 // 'lookup' in route(), so existing receipt links are unaffected.
@@ -72,6 +73,7 @@ function modeToggleHtml(): string {
       ${tab('bundle', t('mode.bundle'))}
       ${tab('lookup', t('mode.lookup'))}
       ${tab('universal', t('mode.universal'))}
+      ${tab('transaction', t('mode.transaction'))}
     </div>`
 }
 
@@ -141,6 +143,20 @@ function universalFormHtml(): string {
     </div>`
 }
 
+function transactionFormHtml(): string {
+  return `
+    <div class="space-y-2">
+      <label class="block text-xs text-navy">${t('tx.packageLabel')}
+        <input id="tx-package" type="file" accept=".cbor,application/cbor" class="block mt-1 text-xs" /></label>
+      <label class="block text-xs text-navy">${t('tx.policyLabel')}
+        <input id="tx-policy" type="file" accept=".json,application/json" class="block mt-1 text-xs" /></label>
+      <button id="tx-verify" type="button"
+        class="px-5 py-2.5 bg-navy text-cream rounded-lg text-sm font-medium hover:bg-mint-deep transition whitespace-nowrap">
+        ${t('tx.verify')}</button>
+      <p class="text-xs" style="color: var(--color-navy-soft)">${t('tx.noExample')}</p>
+    </div>`
+}
+
 function appShellHtml(): string {
   return `
   <div class="max-w-2xl mx-auto px-6 py-12">
@@ -152,14 +168,14 @@ function appShellHtml(): string {
         ${langSwitcherHtml()}
       </div>
       <p class="mt-1 text-sm" style="color: var(--color-navy-soft)">
-        ${mode === 'bundle' ? t('bundle.intro') : mode === 'universal' ? t('universal.intro') : t('app.intro')}
+        ${mode === 'bundle' ? t('bundle.intro') : mode === 'universal' ? t('universal.intro') : mode === 'transaction' ? t('tx.intro') : t('app.intro')}
       </p>
     </header>
 
     ${modeToggleHtml()}
 
     <div id="input-area" class="mb-8">
-      ${mode === 'bundle' ? bundleFormHtml() : mode === 'universal' ? universalFormHtml() : lookupFormHtml()}
+      ${mode === 'bundle' ? bundleFormHtml() : mode === 'universal' ? universalFormHtml() : mode === 'transaction' ? transactionFormHtml() : lookupFormHtml()}
     </div>
 
     <div id="result"></div>
@@ -261,6 +277,24 @@ function bind() {
   document.querySelector('#mode-bundle')?.addEventListener('click', () => switchMode('bundle'))
   document.querySelector('#mode-lookup')?.addEventListener('click', () => switchMode('lookup'))
   document.querySelector('#mode-universal')?.addEventListener('click', () => switchMode('universal'))
+  document.querySelector('#mode-transaction')?.addEventListener('click', () => switchMode('transaction'))
+
+  // ── Transaction evidence mode ──
+  document.querySelector<HTMLButtonElement>('#tx-verify')?.addEventListener('click', async () => {
+    const pf = document.querySelector<HTMLInputElement>('#tx-package')?.files?.[0]
+    const qf = document.querySelector<HTMLInputElement>('#tx-policy')?.files?.[0]
+    if (!pf || !qf) {
+      showError(t('tx.needFiles'))
+      return
+    }
+    try {
+      const report = await verifyTransactionFiles(new Uint8Array(await pf.arrayBuffer()), await qf.text())
+      lastRender = () => { resultEl.innerHTML = renderTransaction(report) }
+      lastRender()
+    } catch (err) {
+      showError(t('universal.err', { msg: err instanceof Error ? err.message : String(err) }))
+    }
+  })
 
   // ── Language switch — preserve current input content, replay last render ──
   const sw = document.querySelector<HTMLSelectElement>('#lang-switch')
