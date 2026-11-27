@@ -1,0 +1,117 @@
+{
+  "evidence_cbor_b64": "oWZwcm9vZnOBo2p3aXRuZXNzX2lkcGJpdGNvaW4tcHJhY3RpY2VmcmVjaXBlmCAY6AIYdxAYXxh9GJcYKxgrGKsYaRggGPsYuBiKGKgYtxjTGC8Yphj4GP4YwxYYyhh9GOAYWhhfGK4Y0BiQaGVsZW1lbnRzhaFoVHJlZVBhdGijZWluZGV4AmRzaXplA2RwYXRogZggGLgYmBg0GFcYsBhdGIQYShioGKoY/ximGLIYGxhxGMcEGKwYuhg3GEwYmRh+GPgYdxjpGJwYPBg1GNsY/xgYoWVFbWJlZKFlYnl0ZXOY0Rh7GCIYYRhsGGcYbxgiGDoYIhhyGGYYYxg5GDEYNhgyGC0YcxhoGGEYMhg1GDYYIhgsGCIYYhhhGHQYYxhoGF8YZBhhGHQYZRgiGDoYIhgyGDAYMhg2GC0YMBg2GC0YMRgyGCIYLBgiGG0YZRhyGGsYbBhlGF8YchhvGG8YdBgiGDoYIhgyGDkYZBg5GDUYZRg2GDcYZRg4GDQYMxhhGGEYNRg3GDIYYxgyGGYYOBhhGDUYZBhiGDEYZRhmGDIYZBg4GDQYOBg2GGEYMRhjGDAYNBgyGGQYNhg0GDEYMhg2GGYYMBg2GDAYNBgzGDYYMBhiGGYYMRhjGDYYNxg3GGQYYxg1GCIYLBgiGHMYbxh1GHIYYxhlGCIYOhgiGG4YYRhzGGEYLRhkGG8YbhhrGGkYIhgsGCIYdBhyGGUYZRhfGHMYaRh6GGUYIhg6GDMYLBgiGHQYeRhwGGUYIhg6GCIYbBhlGGQYZxhlGHIYcBhyGG8YbxhmGC8YcBh1GGIYbBhpGGMYLRhyGGUYYxhvGHIYZBgtGGIYYRh0GGMYaBgiGH2hZUVtYmVkoWVieXRlc5kCWRh7GCIYYxhvGG4YdBhlGG4YdBgiGDoYexgiGGEYbBhnGG8YIhg6GCIYchhmGGMYORgxGDYYMhgtGHMYaBhhGDIYNRg2GCIYLBgiGGIYYRh0GGMYaBhfGGQYYRh0GGUYIhg6GCIYMhgwGDIYNhgtGDAYNhgtGDEYMhgiGCwYIhhtGGUYchhrGGwYZRhfGHIYbxhvGHQYIhg6GCIYMhg5GGQYORg1GGUYNhg3GGUYOBg0GDMYYRhhGDUYNxgyGGMYMhhmGDgYYRg1GGQYYhgxGGUYZhgyGGQYOBg0GDgYNhhhGDEYYxgwGDQYMhhkGDYYNBgxGDIYNhhmGDAYNhgwGDQYMxg2GDAYYhhmGDEYYxg2GDcYNxhkGGMYNRgiGCwYIhhzGG8YdRhyGGMYZRgiGDoYIhhuGGEYcxhhGC0YZBhvGG4YaxhpGCIYLBgiGHQYchhlGGUYXxhzGGkYehhlGCIYOhgzGCwYIhh0GHkYcBhlGCIYOhgiGGwYZRhkGGcYZRhyGHAYchhvGG8YZhgvGHAYdRhiGGwYaRhjGC0YchhlGGMYbxhyGGQYLRhiGGEYdBhjGGgYIhh9GCwYIhhjGG8Ybhh0GGUYbhh0GF8YaBhhGHMYaBgiGDoYIhhmGGQYZRhkGDIYZhhiGDQYYRgyGDUYNBgxGDEYMhgzGDEYMhhhGGMYYRhkGDAYNxg0GDkYYxhmGDMYORg3GDEYYxg0GGEYYxhmGGQYOBg2GGIYZBgzGDgYNRhlGDAYNxg1GGEYYhgyGDYYZBgyGGQYZRgwGGUYNhgzGDgYNRg1GCIYLBgiGGMYbxhuGHQYZRhuGHQYXxh0GHkYcBhlGCIYOhgiGGEYcBhwGGwYaRhjGGEYdBhpGG8YbhgvGHYYbhhkGC4YbBhlGGQYZxhlGHIYcBhyGG8YbxhmGC4YcBh1GGIYbBhpGGMYLRhyGGUYYxhvGHIYZBgrGGoYcxhvGG4YIhgsGCIYaxhlGHkYXxhpGGQYIhg6GCIYaxhlGHkYXxgwGGQYZhgzGDgYYxg2GGQYMhg4GDgYMxg0GDQYMxg4GCIYLBgiGHAYchhlGHYYXxhoGGEYcxhoGCIYOhgiGDYYMhhlGDMYNRgyGGUYZRg5GDYYOBg2GDAYYxgyGDcYZhhiGDQYYhg1GDcYMxhhGDQYMhgxGDIYMxhiGDMYZBg2GGMYYxhhGDkYORg3GGYYZBgxGDAYZhhlGGEYNhhmGDcYOBhhGDkYMRhlGGEYOBhkGGIYMRhhGDcYZBg1GDkYIhgsGCIYcBhyGG8YdBhvGGMYbxhsGF8YdhhlGHIYcxhpGG8YbhgiGDoYIhhsGGUYZBhnGGUYchhwGHIYbxhvGGYYLxgxGC4YMBgiGCwYIhhwGHUYYhhsGGkYcxhoGGUYchhfGGkYZBgiGDoYIhhhGDUYMBgtGHMYYxhhGG4YbhhlGHIYLRh0GHIYaRhhGGwYIhgsGCIYcxhlGHEYdRhlGG4YYxhlGCIYOhg2GDAYNhgyGCwYIhh0GGkYbRhlGHMYdBhhGG0YcBgiGDoYIhgyGDAYMhg2GC0YMBg3GC0YMRgyGFQYMRg1GDoYMhgwGDoYMhgxGFoYIhh9oWhQYWlyUGF0aKFkcGF0aIKCmCAYtBjtGKYYGBgxGNYYXhhXGHgYzxjDGDsYsBhzGMkYWxj8GNAYbRjsGJIYqRibEhiBGP4YlhiiGDcRGN0Yj/WCmCAY6Bi4Cxg7Exg5GIAYwBh5GDIY/hiEGDAYlBjKGC4Y1Bg4GNoYdBipGNEYxRhfGKIYjhiuGEQYRxhfGOYYvvShbEJpdGNvaW5DaGFpbqRmcmF3X3R4mGoCAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABwAAAAAY/xj/GP8Y/wEAAAAAAAAAABguGGoYLBhMGFAYUhgxAAAXGKwAABcYrhjxGNIYGxIYcBguGGwYKhjoGBwYjRjTGJUY9xiLGM4HGIsYmhiKGNwYrxgvGD0YvhjeGPsYXhh0GHwYmhjSAAAAAGh0eF9pbmRleAFmYnJhbmNogZggGMoYGhjoGJMYLRiCBQ4YeRiOGIQYwhjNGH4YWhhUDBiZGEsYORhqDxhsGKgHERhgGFQYIBgYGDEYmWZoZWFkZXKYUAAAABggAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYRRiCGIQYrwcNBxgzARjNGLQYyhjKGMcYrxQBGCIYMBiCGOIY7RiYARjIGJoY5hhWGIYYhRjhGGMYWBiDGCQYaRj/GP8YfxggAQAAAA==",
+  "format": "lp-evidence/v1",
+  "label": "Demo: real NASA DONKI record (2026-06-12) — Bitcoin hop on a PRACTICE chain",
+  "practice": true,
+  "registry": {
+    "recipes": [
+      {
+        "bricks": [
+          {
+            "Fingerprint": {
+              "alg": "Sha256"
+            }
+          },
+          "TreePath",
+          {
+            "EmbedHex": {
+              "key": "merkle_root"
+            }
+          },
+          {
+            "EmbedHex": {
+              "key": "content_hash"
+            }
+          },
+          "PairPath",
+          "BitcoinChain"
+        ],
+        "id": "ledgerproof-public-record",
+        "version": 1
+      }
+    ],
+    "witnesses": [
+      {
+        "anchor": {
+          "BitcoinCheckpoint": {
+            "max_target_bits": 545259519,
+            "trusted_blocks": [
+              [
+                32,
+                159,
+                205,
+                192,
+                143,
+                181,
+                137,
+                121,
+                26,
+                23,
+                221,
+                15,
+                122,
+                22,
+                107,
+                110,
+                253,
+                134,
+                46,
+                14,
+                109,
+                148,
+                231,
+                141,
+                120,
+                81,
+                60,
+                231,
+                228,
+                235,
+                65,
+                59
+              ]
+            ]
+          }
+        },
+        "jurisdiction": null,
+        "promise": "BeforeBlock",
+        "recipe": [
+          232,
+          2,
+          119,
+          16,
+          95,
+          125,
+          151,
+          43,
+          43,
+          171,
+          105,
+          32,
+          251,
+          184,
+          138,
+          168,
+          183,
+          211,
+          47,
+          166,
+          248,
+          254,
+          195,
+          22,
+          202,
+          125,
+          224,
+          90,
+          95,
+          174,
+          208,
+          144
+        ],
+        "witness_id": "bitcoin-practice"
+      }
+    ]
+  },
+  "subject_sha256": "48248f9143db557ae271fa440883bcc543e5d08cb0ebf046dcc59c2c6ae00e12"
+}
