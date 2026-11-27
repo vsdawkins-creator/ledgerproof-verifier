@@ -178,6 +178,40 @@ export function verify_transaction(package_cbor, policy_json) {
     }
 }
 
+/**
+ * The recipe cards compiled into this brick box, with their canonical digests.
+ * @returns {string}
+ */
+export function recipe_catalog() {
+    let deferred1_0;
+    let deferred1_1;
+    try {
+        const ret = wasm.recipe_catalog();
+        deferred1_0 = ret[0];
+        deferred1_1 = ret[1];
+        return getStringFromWasm0(ret[0], ret[1]);
+    } finally {
+        wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+    }
+}
+
+/**
+ * The jurisdiction rule cards compiled into the scanner rules engine.
+ * @returns {string}
+ */
+export function rule_cards() {
+    let deferred1_0;
+    let deferred1_1;
+    try {
+        const ret = wasm.rule_cards();
+        deferred1_0 = ret[0];
+        deferred1_1 = ret[1];
+        return getStringFromWasm0(ret[0], ret[1]);
+    } finally {
+        wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+    }
+}
+
 async function __wbg_load(module, imports) {
     if (typeof Response === 'function' && module instanceof Response) {
         if (typeof WebAssembly.instantiateStreaming === 'function') {
